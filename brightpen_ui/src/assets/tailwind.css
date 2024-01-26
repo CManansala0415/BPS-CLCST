@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+    html {
+        min-width: 390px;
+    }
+
+    #banner {
+        background: url('/img/dam.jpg');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+    }
+
+    #courses {
+        background: url('/img/courses.jpg');
+    }
+    #sections {
+        background: url('/img/sections.jpg');
+    }
+    #subjects {
+        background: url('/img/subjects.jpg');
+    }
+    #year {
+        background: url('/img/users.jpg');
+    }
+    #faculties {
+        background: url('/img/faculties.jpg');
+    }
+    #classrooms {
+        background: url('/img/classrooms.jpg');
+    }
+
+    #courses, #sections, #subjects, #year, #faculties, #classrooms  {
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+    }
+
+
+}
