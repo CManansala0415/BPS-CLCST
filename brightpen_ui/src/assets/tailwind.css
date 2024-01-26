@@ -8,7 +8,14 @@
     }
 
     #banner {
-        background: url('/img/dam.jpg');
+        background: url('/img/clcstoc.jpg');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+    }
+
+    #logo {
+        background: url('/img/clcst_logo.png');
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;

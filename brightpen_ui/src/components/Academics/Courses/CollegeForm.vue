@@ -14,7 +14,7 @@ onMounted(async () => {
     }).catch((err) => {
         alert('error loading departments')
     })
-
+ 
     getSemester().then((results) => {
         semesterType.value=results
 
@@ -32,8 +32,8 @@ const items = ref({
     prog_degree:'',
     prog_year: '',
     prog_progtype: 2, // 2 means college
-    program_semtype: '',
-    program_semcount: '',
+    prog_semtype: '',
+    prog_semcount: '',
     dprog_y1:{
         semester_1_units: '',
         semester_2_units: '',
@@ -71,8 +71,8 @@ const updateYears = () =>{
             items.value.prog_year=0
     }
 
-    items.value.program_semtype = ''
-    items.value.program_semcount = ''
+    items.value.prog_semtype = ''
+    items.value.prog_semcount = ''
 
     items.value.dprog_y1 ={
             semester_1_units: '',
@@ -97,15 +97,16 @@ const updateYears = () =>{
 }
 const updateSem = () =>{
     // if semester (id:1) 2 sems, if trimester (id:2) 3 sems
-    switch(items.value.program_semtype){
+    console.log(items.value.prog_semtype)
+    switch(items.value.prog_semtype){
         case 1:
-            items.value.program_semcount=2
+            items.value.prog_semcount=2
             break;
         case 5:
-            items.value.program_semcount=3
+            items.value.prog_semcount=3
             break;
         default:
-            items.value.program_semcount=0
+            items.value.prog_semcount=0
     }
 
 }
@@ -143,7 +144,7 @@ const save = ()=>{
                 <div class="flex flex-col gap-2">
                     <p class="text-xs">Semester Type<span class="text-red-500">*</span></p>
                     <select class="p-2 rounded-md border border-gray-300 shadow-md text-xs" 
-                        v-model="items.program_semtype" 
+                        v-model="items.prog_semtype" 
                         @change="updateSem()" required>
                         <option value="" disabled>-- Select Here --</option>
                         <option v-for="(s, index) in semesterType" :value="s.sem_id">{{ s.sem_desc }}</option>
@@ -152,10 +153,10 @@ const save = ()=>{
             </div>
         </div>
         
-        <div v-if="items.prog_degree == 4 && items.program_semtype">
+        <div v-if="items.prog_degree == 4 && items.prog_semtype">
             <div class="relative mt-3 flex flex-col gap-2 border border-gray-300 p-5">
                 <p class="absolute -top-2.5 px-4 py-0.5 text-xs font-semibold bg-emerald-500 text-white">Year 1 Expected Units</p>
-                <div :class="items.program_semtype == 1? 'mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-2':'mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2'">
+                <div :class="items.prog_semtype == 1? 'mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-2':'mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2'">
                     <div class="flex flex-col gap-2">
                         <p class="text-xs">Semester 1<span class="text-red-500">*</span></p>
                         <input type="number" class="p-2 rounded-md border border-gray-300 shadow-md text-xs" 
@@ -168,7 +169,7 @@ const save = ()=>{
                         v-model="items.dprog_y1.semester_2_units"
                             placeholder="ex. 4" required min="0" max="50"/>
                     </div>
-                    <div v-if="items.prog_degree == 4 && items.program_semtype == 2" class="flex flex-col gap-2">
+                    <div v-if="items.prog_degree == 4 && items.prog_semtype == 2" class="flex flex-col gap-2">
                         <p class="text-xs">Semester 3<span class="text-red-500">*</span></p>
                         <input type="number" class="p-2 rounded-md border border-gray-300 shadow-md text-xs" 
                         v-model="items.dprog_y1.semester_3_units"
@@ -178,7 +179,7 @@ const save = ()=>{
             </div>
             <div class="relative mt-3 flex flex-col gap-2 border border-gray-300 p-5">
                 <p class="absolute -top-2.5 px-4 py-0.5 text-xs font-semibold bg-emerald-500 text-white">Year 2 Expected Units</p>
-                <div :class="items.program_semtype == 1? 'mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-2':'mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2'">
+                <div :class="items.prog_semtype == 1? 'mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-2':'mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2'">
                     <div class="flex flex-col gap-2">
                         <p class="text-xs">Semester 1<span class="text-red-500">*</span></p>
                         <input type="number" class="p-2 rounded-md border border-gray-300 shadow-md text-xs" 
@@ -191,7 +192,7 @@ const save = ()=>{
                         v-model="items.dprog_y2.semester_2_units"
                             placeholder="ex. 4" required min="0" max="50"/>
                     </div>
-                    <div v-if="items.prog_degree == 4 && items.program_semtype == 2" class="flex flex-col gap-2">
+                    <div v-if="items.prog_degree == 4 && items.prog_semtype == 2" class="flex flex-col gap-2">
                         <p class="text-xs">Semester 3<span class="text-red-500">*</span></p>
                         <input type="number" class="p-2 rounded-md border border-gray-300 shadow-md text-xs" 
                         v-model="items.dprog_y2.semester_3_units"
@@ -201,7 +202,7 @@ const save = ()=>{
             </div>
             <div class="relative mt-3 flex flex-col gap-2 border border-gray-300 p-5">
                 <p class="absolute -top-2.5 px-4 py-0.5 text-xs font-semibold bg-emerald-500 text-white">Year 3 Expected Units</p>
-                <div :class="items.program_semtype == 1? 'mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-2':'mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2'">
+                <div :class="items.prog_semtype == 1? 'mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-2':'mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2'">
                     <div class="flex flex-col gap-2">
                         <p class="text-xs">Semester 1<span class="text-red-500">*</span></p>
                         <input type="number" class="p-2 rounded-md border border-gray-300 shadow-md text-xs" 
@@ -214,7 +215,7 @@ const save = ()=>{
                         v-model="items.dprog_y3.semester_2_units"
                             placeholder="ex. 4" required min="0" max="50"/>
                     </div>
-                    <div v-if="items.prog_degree == 4 && items.program_semtype == 2" class="flex flex-col gap-2">
+                    <div v-if="items.prog_degree == 4 && items.prog_semtype == 2" class="flex flex-col gap-2">
                         <p class="text-xs">Semester 3<span class="text-red-500">*</span></p>
                         <input type="number" class="p-2 rounded-md border border-gray-300 shadow-md text-xs" 
                         v-model="items.dprog_y3.semester_3_units"
@@ -224,7 +225,7 @@ const save = ()=>{
             </div>
             <div class="relative mt-3 flex flex-col gap-2 border border-gray-300 p-5">
                 <p class="absolute -top-2.5 px-4 py-0.5 text-xs font-semibold bg-emerald-500 text-white">Year 4 Expected Units</p>
-                <div :class="items.program_semtype == 1? 'mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-2':'mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2'">
+                <div :class="items.prog_semtype == 1? 'mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-2':'mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2'">
                     <div class="flex flex-col gap-2">
                         <p class="text-xs">Semester 1<span class="text-red-500">*</span></p>
                         <input type="number" class="p-2 rounded-md border border-gray-300 shadow-md text-xs" 
@@ -237,7 +238,7 @@ const save = ()=>{
                         v-model="items.dprog_y4.semester_2_units"
                             placeholder="ex. 4" required min="0" max="50"/>
                     </div>
-                    <div v-if="items.prog_degree == 4 && items.program_semtype == 2" class="flex flex-col gap-2">
+                    <div v-if="items.prog_degree == 4 && items.prog_semtype == 2" class="flex flex-col gap-2">
                         <p class="text-xs">Semester 3<span class="text-red-500">*</span></p>
                         <input type="number" class="p-2 rounded-md border border-gray-300 shadow-md text-xs" 
                         v-model="items.dprog_y4.semester_3_units"
@@ -248,10 +249,10 @@ const save = ()=>{
             
         </div>   
         
-        <div v-if="items.prog_degree == 5 && items.program_semtype">
+        <div v-if="items.prog_degree == 5 && items.prog_semtype">
             <div class="relative mt-3 flex flex-col gap-2 border border-gray-300 p-5">
                 <p class="absolute -top-2.5 px-4 py-0.5 text-xs font-semibold bg-emerald-500 text-white">Year 1 Expected Units</p>
-                <div :class="items.program_semtype == 1? 'mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-2':'mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2'">
+                <div :class="items.prog_semtype == 1? 'mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-2':'mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2'">
                     <div class="flex flex-col gap-2">
                         <p class="text-xs">Semester 1<span class="text-red-500">*</span></p>
                         <input type="number" class="p-2 rounded-md border border-gray-300 shadow-md text-xs" 
@@ -264,7 +265,7 @@ const save = ()=>{
                         v-model="items.dprog_y1.semester_2_units"
                             placeholder="ex. 4" required min="0" max="50"/>
                     </div>
-                    <div v-if="items.prog_degree == 5 && items.program_semtype == 2" class="flex flex-col gap-2">
+                    <div v-if="items.prog_degree == 5 && items.prog_semtype == 2" class="flex flex-col gap-2">
                         <p class="text-xs">Semester 3<span class="text-red-500">*</span></p>
                         <input type="number" class="p-2 rounded-md border border-gray-300 shadow-md text-xs" 
                         v-model="items.dprog_y1.semester_3_units"
@@ -274,7 +275,7 @@ const save = ()=>{
             </div>
             <div class="relative mt-3 flex flex-col gap-2 border border-gray-300 p-5">
                 <p class="absolute -top-2.5 px-4 py-0.5 text-xs font-semibold bg-emerald-500 text-white">Year 2 Expected Units</p>
-                <div :class="items.program_semtype == 1? 'mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-2':'mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2'">
+                <div :class="items.prog_semtype == 1? 'mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-2':'mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2'">
                     <div class="flex flex-col gap-2">
                         <p class="text-xs">Semester 1<span class="text-red-500">*</span></p>
                         <input type="number" class="p-2 rounded-md border border-gray-300 shadow-md text-xs" 
@@ -287,7 +288,7 @@ const save = ()=>{
                         v-model="items.dprog_y2.semester_2_units"
                             placeholder="ex. 4" required min="0" max="50"/>
                     </div>
-                    <div v-if="items.prog_degree == 5 && items.program_semtype == 2" class="flex flex-col gap-2">
+                    <div v-if="items.prog_degree == 5 && items.prog_semtype == 2" class="flex flex-col gap-2">
                         <p class="text-xs">Semester 3<span class="text-red-500">*</span></p>
                         <input type="number" class="p-2 rounded-md border border-gray-300 shadow-md text-xs" 
                         v-model="items.dprog_y2.semester_3_units"

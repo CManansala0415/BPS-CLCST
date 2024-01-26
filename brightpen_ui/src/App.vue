@@ -30,7 +30,7 @@ const active_class = ref("flex items-center justify-center w-full rounded-lg cur
 
 <template>
   <div class="relative flex flex-col min-w-full min-h-screen bg-gray-100">
-    <div v-if="path !='/'" class="bg-medium-green text-gray-100 fixed top-0 z-10 flex flex-col md:flex-row gap-2 p-5 shadow-md shadow-gray-500 w-full h-auto md:h-24">
+    <div v-if="path !='/'" class="bg-medium-green text-gray-100 fixed top-0 z-10 flex flex-col md:flex-row gap-2 p-5 shadow-md shadow-gray-600 w-full h-auto md:h-24">
       <div class="basis-full md:basis-1/4 flex items-center md:justify-start sm:justify-center justify-between">
         <div class="flex gap-3">
           <p class="text-md font-bold text-gray-200">BRIGHTPEN</p>

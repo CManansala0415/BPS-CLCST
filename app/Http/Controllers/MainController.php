@@ -44,27 +44,17 @@ class MainController extends Controller
 
     public function saveCourseCollege(Request $request)
     {
-        DB::table('def_program')->insert([
-            'prog_code' => $request->input('prog_code'),
-            'prog_name' => $request->input('prog_name'),
-            'prog_desc' => $request->input('prog_desc'),
-            'prog_degree' => $request->input('prog_degree'),
-            'prog_year' => $request->input('prog_year'),
-            'prog_progtype' => $request->input('prog_progtype'),
-            'prog_semtype' => $request->input('prog_semtype'),
-            'prog_semcount' => $request->input('prog_semcount'),
-        ]);
-
-        // DB::table('def_program_years')->insert([
-        //     'dprog_y1' => $request->input('dprog_y1'),
-        //     'dprog_y2' => $request->input('dprog_y2'),
-        //     'dprog_y3' => $request->input('dprog_y3'),
-        //     'dprog_y4' => $request->input('dprog_y4'),
+        // DB::table('def_program')->insert([
+        //     'prog_code' => $request->input('prog_code'),
+        //     'prog_name' => $request->input('prog_name'),
+        //     'prog_desc' => $request->input('prog_desc'),
+        //     'prog_degree' => $request->input('prog_degree'),
+        //     'prog_year' => $request->input('prog_year'),
+        //     'prog_progtype' => $request->input('prog_progtype'),
+        //     'prog_semtype' => $request->input('prog_semtype'),
+        //     'prog_semcount' => $request->input('prog_semcount'),
         // ]);
 
-        return $request;
     }
-
-    
     
 }
