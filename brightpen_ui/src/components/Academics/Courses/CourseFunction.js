@@ -86,7 +86,7 @@ const getProgramList = async () => {
 }
 
 
-
+let status = ''
 const saveCollegeForm = async (data) => {
 
     try{
@@ -95,9 +95,10 @@ const saveCollegeForm = async (data) => {
             url: 'api/save-course-college/',
             data:data
         }).then(async (results) => {
-            console.log(results.data)
+            // console.log(results.data)
+            status = results.data
         })
-        // return semester
+        return status
     }catch(err){
         return err
     }

@@ -44,17 +44,78 @@ class MainController extends Controller
 
     public function saveCourseCollege(Request $request)
     {
-        // DB::table('def_program')->insert([
-        //     'prog_code' => $request->input('prog_code'),
-        //     'prog_name' => $request->input('prog_name'),
-        //     'prog_desc' => $request->input('prog_desc'),
-        //     'prog_degree' => $request->input('prog_degree'),
-        //     'prog_year' => $request->input('prog_year'),
-        //     'prog_progtype' => $request->input('prog_progtype'),
-        //     'prog_semtype' => $request->input('prog_semtype'),
-        //     'prog_semcount' => $request->input('prog_semcount'),
-        // ]);
+        $primary = DB::table('def_program')->insert([
+            'prog_code' => $request->input('prog_code'),
+            'prog_name' => $request->input('prog_name'),
+            'prog_desc' => $request->input('prog_desc'),
+            'prog_degree' => $request->input('prog_degree'),
+            'prog_year' => $request->input('prog_year'),
+            'prog_progtype' => $request->input('prog_progtype'),
+            'prog_semtype' => $request->input('prog_semtype'),
+            'prog_semcount' => $request->input('prog_semcount'),
+        ]);
 
+        if($primary){
+            $progdata = DB::table('def_program')
+            ->select('prog_id')
+            ->where('prog_code','=', $request->input('prog_code'))
+            ->first();
+
+            if($progdata){
+                $yearid = $progdata->prog_id;
+                try {
+                    $dprog_y1 = $request->input('dprog_y1');
+                    $s1 = DB::table('def_program_years')->insert([
+                        'dprog_progid' => $yearid,
+                        'dprog_year' => 1,
+                        'dprog_s1' => $dprog_y1['semester_1_units'],
+                        'dprog_s2' => $dprog_y1['semester_2_units'],
+                        'dprog_s3' => $dprog_y1['semester_3_units'],
+                    ]);
+    
+                    $dprog_y2 = $request->input('dprog_y2');
+                    $s2 = DB::table('def_program_years')->insert([
+                        'dprog_progid' => $yearid,
+                        'dprog_year' => 2,
+                        'dprog_s1' => $dprog_y2['semester_1_units'],
+                        'dprog_s2' => $dprog_y2['semester_2_units'],
+                        'dprog_s3' => $dprog_y2['semester_3_units'],
+                    ]);
+    
+                    $dprog_y3 = $request->input('dprog_y3');
+                    $s3 = DB::table('def_program_years')->insert([
+                        'dprog_progid' => $yearid,
+                        'dprog_year' => 3,
+                        'dprog_s1' => $dprog_y3['semester_1_units'],
+                        'dprog_s2' => $dprog_y3['semester_2_units'],
+                        'dprog_s3' => $dprog_y3['semester_3_units'],
+                    ]);
+    
+                    $dprog_y4 = $request->input('dprog_y4');
+                    $s4 = DB::table('def_program_years')->insert([
+                        'dprog_progid' => $yearid,
+                        'dprog_year' => 4,
+                        'dprog_s1' => $dprog_y4['semester_1_units'],
+                        'dprog_s2' => $dprog_y4['semester_2_units'],
+                        'dprog_s3' => $dprog_y4['semester_3_units'],
+                    ]);
+
+                    return 204;
+                    
+                } catch (Exception $ex) {
+                    return 500;
+                }
+               
+            }
+             
+        }
+
+       
+
+       
+
+        
+        
     }
     
 }

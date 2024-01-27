@@ -11,6 +11,9 @@ const showForm = ref(false)
 const ptype = ref(1)
 const programType = ref([])
 const programList = ref([])
+const filteredPrograms = ref([])
+const search = ref('')
+const temp = ref([])
 const isLoading = ref(false)
 
 onMounted(async () => {
@@ -21,7 +24,9 @@ onMounted(async () => {
 
         getProgramList().then((results) => {
 
+            temp.value=results
             programList.value=results
+            filteredPrograms.value=results
             isLoading.value = false
 
         }).catch((err) => {
@@ -32,11 +37,24 @@ onMounted(async () => {
         alert('error loading programs')
     })
 
-   
-    
-
 })
 
+const filterProgram = ()=>{
+    filteredPrograms.value = temp.value.filter(e => {
+      if(
+          (e.prog_name.toUpperCase().includes(search.value.toUpperCase()))||
+          (e.prog_code.toUpperCase().includes(search.value.toUpperCase()))||
+          (e.prog_desc.toUpperCase().includes(search.value.toUpperCase()))
+        ){
+          return e
+      }
+    })
+  console.log(filteredPrograms.value)
+}
+
+const reloadPage = ()=>{
+    location.reload()
+}
 
 </script>
 
@@ -50,8 +68,8 @@ onMounted(async () => {
                     <button type="button" :disabled="isLoading" @click="showForm = true" class="px-5 bg-emerald-500 text-xs text-white rounded-md hover:bg-emerald-400 disabled:bg-gray-200 disabled:cursor-not-allowed"><i class="fa-solid fa-plus mr-2"></i> Add New</button>
                 </div>
                 <div class="flex">
-                    <input type="text" :disabled="isLoading" class="p-2 border-0 shadow-md text-xs disabled:bg-gray-200 disabled:cursor-not-allowed" placeholder="Search Course Here..."/>
-                    <button type="button" :disabled="isLoading" class="p-2 bg-emerald-400 shadow-md disabled:bg-gray-200 disabled:cursor-not-allowed"><i class="fa-solid fa-magnifying-glass text-white"></i></button>
+                    <input type="text" @keyup="filterProgram()" v-model="search" :disabled="isLoading" class="p-2 border-0 shadow-md text-xs disabled:bg-gray-200 disabled:cursor-not-allowed" placeholder="Search Course Here..."/>
+                    <button type="button" @click="filteredPrograms = programList" :disabled="isLoading" class="p-2 bg-cyan-400 shadow-md disabled:bg-gray-200 disabled:cursor-not-allowed text-xs text-white">Clear</button>
                 </div>
             </div>
             
@@ -80,9 +98,9 @@ onMounted(async () => {
             <p class="text-sm font-semibold text-gray-500">retrieving data from the server please wait...</p>
         </div>
 
-        <div v-if="Object.keys(programList).length && !isLoading" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+        <div v-if="Object.keys(filteredPrograms).length && !isLoading" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
             
-            <div v-for="(p, index) in programList" class="flex flex-col justify-evenly p-3 h-96  bg-white rounded-md shadow-md ">
+            <div v-for="(p, index) in filteredPrograms" class="flex flex-col justify-evenly p-3 bg-white rounded-md shadow-md ">
                 <div class="border-0 border-b-2 border-gray-300 p-2 flex justify-between">
                     <p class="text-md font-semibold">{{ p.prog_code }}</p>
                 </div>
@@ -91,7 +109,7 @@ onMounted(async () => {
                     <p class="text-xs font-semibold">
                     {{ p.prog_name }}</p>
                 </div>
-                <div class="p-2 flex flex-col overflow-auto bg-gray-50 border rounded-lg text-justify">
+                <div class="p-2 flex flex-col h-48 overflow-auto bg-gray-50 border rounded-lg text-justify">
                     <p class="text-xs">
                     {{ p.prog_desc }}</p>
                 </div>
@@ -119,7 +137,7 @@ onMounted(async () => {
             <p class="text-xl text-emerald-600 font-bold">Programs Settings</p>
             <div class="flex gap-2">
                 <div class="flex">
-                    <button type="button" @click="showForm=false, ptype=1" class="p-3 bg-cyan-500 text-xs text-white rounded-md hover:bg-cyan-400 disabled:bg-gray-200 disabled:cursor-not-allowed"><i class="fa-solid fa-rotate-left mr-2"></i> Back to List</button>
+                    <button type="button" @click="reloadPage()" class="p-3 bg-cyan-500 text-xs text-white rounded-md hover:bg-cyan-400 disabled:bg-gray-200 disabled:cursor-not-allowed"><i class="fa-solid fa-rotate-left mr-2"></i> Back to List</button>
                 </div>
             </div>
             
