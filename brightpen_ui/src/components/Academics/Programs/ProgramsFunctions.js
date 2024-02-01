@@ -69,12 +69,12 @@ const getSemester = async () => {
 }
 
 let programlist = {}
-const getProgramList = async () => {
-
+const getProgramList = async (id) => {
+    
     try{
         await axios({
             method: "GET",
-            url: 'api/get-program-list/',
+            url: 'api/get-program-list/'+id,
         }).then(async (results) => {
             // console.log(results.data)
             programlist = results.data
@@ -87,12 +87,12 @@ const getProgramList = async () => {
 
 
 let status = ''
-const saveCollegeForm = async (data) => {
+const saveProgram = async (data) => {
 
     try{
         await axios({
             method: "POST",
-            url: 'api/save-course-college/',
+            url: 'api/save-program/',
             data:data
         }).then(async (results) => {
             // console.log(results.data)
@@ -112,5 +112,5 @@ export {
     getQuarter,
     getSemester,
     getProgramList,
-    saveCollegeForm
+    saveProgram
 }

@@ -1,14 +1,14 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import Courses from './Courses/Courses.vue';
-import Sections from './Sections.vue';
-import YearLevels from './YearLevels.vue';
-import Classrooms from './Classrooms.vue';
-import Subjects from './Subjects.vue';
-import Faculties from './Faculties.vue';
-import Departments from './Departments.vue';
+import Programs from './Programs/Programs.vue';
+import Sections from './Sections/Sections.vue';
+import YearLevels from './YearLevels/YearLevels.vue';
+import Classrooms from './Classrooms/Classrooms.vue';
+import Subjects from './Subjects/Subjects.vue';
+import Faculties from './Faculties/Faculties.vue';
+import Departments from './Departments/Departments.vue';
 
-const def_class = ref("flex items-center w-full rounded-lg cursor-pointer hover:bg-emerald-600 hover:text-gray-100 p-2");
+const def_class = ref("flex items-center w-full rounded-lg cursor-pointer hover:bg-emerald-400 hover:text-gray-100 p-2");
 const active_class = ref("flex items-center w-full rounded-lg cursor-pointer bg-emerald-600 hover:bg-emerald-500 text-gray-100 p-2");
 const content = ref(1)
 
@@ -32,13 +32,16 @@ const content = ref(1)
                   <p class="text-xs">Grade Levels</p>
                </div>
                <div :class="content == 4? active_class:def_class" @click="content = 4">
-                  <p class="text-xs">Department</p>
+                  <p class="text-xs">Classrooms</p>
                </div>
                <div :class="content == 5? active_class:def_class" @click="content = 5">
                   <p class="text-xs">Subjects</p>
                </div>
                <div :class="content == 6? active_class:def_class" @click="content = 6">
                   <p class="text-xs">Classrooms</p>
+               </div>
+               <div :class="content == 7? active_class:def_class" @click="content = 6">
+                  <p class="text-xs">Departments</p>
                </div>
             </div>
            
@@ -50,26 +53,39 @@ const content = ref(1)
             <div class="w-full p-2">
                <!-- <Transition name="slide-fade" mode="out-in"> -->
                   <div v-if="content == 1">
-                     <Courses></Courses>
+                     <Programs/>
                   </div>
                 <!-- </Transition> -->
-               <!-- <Transition name="slide-fade" mode="out-in"> -->
+                <!-- <Transition name="slide-fade" mode="out-in"> -->
                   <div v-if="content == 2">
-                     <Sections></Sections>
+                     <Sections/>
                   </div>
                <!-- </Transition> -->
-               <div v-if="content == 3">
-                  <Courses></Courses>
-               </div>
-               <div v-if="content == 4">
-                  <Courses></Courses>
-               </div>
-               <div v-if="content == 5">
-                  <Courses></Courses>
-               </div>
-               <div v-if="content == 6">
-                  <Courses></Courses>
-               </div>
+               <!-- <Transition name="slide-fade" mode="out-in"> -->
+                  <div v-if="content == 3">
+                     <YearLevels/>
+                  </div>
+               <!-- </Transition> -->
+               <!-- <Transition name="slide-fade" mode="out-in"> -->
+                  <div v-if="content == 4">
+                     <Classrooms/>
+                  </div>
+               <!-- </Transition> -->
+               <!-- <Transition name="slide-fade" mode="out-in"> -->
+                  <div v-if="content == 5">
+                     <Subjects/>
+                  </div>
+               <!-- </Transition> -->
+               <!-- <Transition name="slide-fade" mode="out-in"> -->
+                  <div v-if="content == 6">
+                     <Faculties/>
+                  </div>
+               <!-- </Transition> -->
+               <!-- <Transition name="slide-fade" mode="out-in"> -->
+                  <div v-if="content == 7">
+                     <Departments/>
+                  </div>
+               <!-- </Transition> -->
             </div>
          </div>
          <div class=" basis-3/12 flex flex-col gap-2 p-5">

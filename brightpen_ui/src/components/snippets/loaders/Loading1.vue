@@ -1,9 +1,13 @@
 <template>
-    <div class="lds-ring">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
+    <div class="gap-4 flex flex-col justify-center items-center p-3 h-96 ">
+        <div class="lds-ring">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <p class="text-2xl font-bold text-gray-600">Loading List</p>
+        <p class="text-sm font-semibold text-gray-500">retrieving data from the server please wait...</p>
     </div>
 </template>
 <style>
