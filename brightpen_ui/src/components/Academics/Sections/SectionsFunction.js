@@ -1,27 +1,27 @@
 import axios from 'axios';
 
-let subjects = {}
-const getSubject = async (type) => {
+let section = {}
+const getSection = async (type) => {
     try{
         await axios({
             method: "GET",
-            url: 'api/get-subject/',
+            url: 'api/get-section/',
         }).then(async (results) => {
             // console.log(results.data)
-            subjects = results.data
+            section = results.data
         })
-        return subjects
+        return section
     }catch(err){
         return 500
     }
 }
 
 let response = {}
-const saveSubject = async (data) => {
+const saveSection = async (data) => {
     try{
         await axios({
             method: "POST",
-            url: 'api/save-subject/',
+            url: 'api/save-section/',
             data:data
 
         }).then(async (results) => {
@@ -32,11 +32,11 @@ const saveSubject = async (data) => {
         return 500
     }
 }
-const addSubject = async (data) => {
+const addSection = async (data) => {
     try{
         await axios({
             method: "POST",
-            url: 'api/add-subject/',
+            url: 'api/add-section/',
             data:data
 
         }).then(async (results) => {
@@ -47,10 +47,12 @@ const addSubject = async (data) => {
         return 500
     }
 }
+
+
 
 
 export {
-    getSubject,
-    saveSubject,
-    addSubject
+    getSection,
+    saveSection,
+    addSection
 }

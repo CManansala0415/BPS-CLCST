@@ -1,27 +1,26 @@
 import axios from 'axios';
 
-let subjects = {}
-const getSubject = async (type) => {
+let gradelvl = {}
+const getGradelvl = async (type) => {
     try{
         await axios({
             method: "GET",
-            url: 'api/get-subject/',
+            url: 'api/get-gradelvl/',
         }).then(async (results) => {
             // console.log(results.data)
-            subjects = results.data
+            gradelvl = results.data
         })
-        return subjects
+        return gradelvl
     }catch(err){
         return 500
     }
 }
-
 let response = {}
-const saveSubject = async (data) => {
+const saveGradelvl = async (data) => {
     try{
         await axios({
             method: "POST",
-            url: 'api/save-subject/',
+            url: 'api/save-gradelvl/',
             data:data
 
         }).then(async (results) => {
@@ -32,11 +31,11 @@ const saveSubject = async (data) => {
         return 500
     }
 }
-const addSubject = async (data) => {
+const addGradelvl = async (data) => {
     try{
         await axios({
             method: "POST",
-            url: 'api/add-subject/',
+            url: 'api/add-gradelvl/',
             data:data
 
         }).then(async (results) => {
@@ -47,10 +46,12 @@ const addSubject = async (data) => {
         return 500
     }
 }
+
+
 
 
 export {
-    getSubject,
-    saveSubject,
-    addSubject
+    getGradelvl,
+    saveGradelvl,
+    addGradelvl
 }

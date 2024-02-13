@@ -57,7 +57,6 @@ onMounted(async () => {
 
 // to load data if update yung accessType
 const loadData = (data) =>{
-    console.log(data)
     items.value.prog_code = data[0].prog_code
     items.value.prog_name = data[0].prog_name
     items.value.prog_desc = data[0].prog_desc
