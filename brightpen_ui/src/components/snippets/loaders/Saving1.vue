@@ -1,14 +1,23 @@
+<script setup>
+import { ref, onMounted, computed } from 'vue';
+const props = defineProps({
+    title: {
+    },  
+    details: {
+    },  
+})
+
+</script>
 <template>
-    <div class="gap-4 flex flex-col justify-center items-center p-3 h-96 ">
+    <div class="gap-4 flex flex-col justify-center items-center p-3">
         <div class="lds-ring">
             <div></div>
             <div></div>
             <div></div>
             <div></div>
         </div>
-        <p class="text-2xl font-bold text-gray-600">Loading List</p>
-        <p class="text-sm font-semibold text-gray-500">retrieving data from the server please wait...</p>
-        <slot></slot>
+        <p class="text-2xl font-bold text-gray-600">{{ title }}</p>
+        <p class="text-sm font-semibold text-gray-500">{{ details }}</p>
     </div>
 </template>
 <style>

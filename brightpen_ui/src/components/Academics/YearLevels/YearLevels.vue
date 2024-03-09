@@ -4,7 +4,7 @@ import Loader from '../../snippets/loaders/Loading1.vue';
 import NoDataFound from '../../snippets/informational/NoDataFound.vue';
 import SearchHeader from '../../snippets/headers/SearchHeader.vue';
 // import Table1 from '../../snippets/tables/Table1.vue';
-import { getGradelvl, saveGradelvl } from "./YearLevelsFunction.js";
+import { getGradelvl, saveGradelvl, getProgram } from "./YearLevelsFunction.js";
 
 
 const preLoading = ref(false)
@@ -13,6 +13,7 @@ const activeEdit = ref(true)
 const activeEditCell = ref(0)
 
 const gradelvl = ref([])
+const program = ref([])
 const header = ref([
     {
         title: 'ID',
@@ -38,14 +39,25 @@ const header = ref([
 ])
 onMounted(async () => {
 
-    preLoading.value = true
-    getGradelvl().then((results)=>{
-        console.log(results)
+    
+
+    try{
+        preLoading.value = true
+        getGradelvl().then((results)=>{
+            gradelvl.value = results
+        }).catch((err) => {
+                alert('error loading the list Grade Levels')
+        })
+        getProgram().then((results)=>{
+            preLoading.value = false
+            program.value = results
+        })
+       
+   }catch(err) {
         preLoading.value = false
-        gradelvl.value = results
-    }).catch((err) => {
-            alert('error loading the list Grade Levels')
-    })
+        alert('error loading the list default components')
+   }
+    
 
 })
 
@@ -103,6 +115,17 @@ const registerData = (data) =>{
                                     <p class="text-xs font-semibold italic">Grade Level Name</p>
                                     <input type="text" class="w-full border border-gray-300 p-2 text-xs disabled:shadow-inner rounded-md disabled:bg-gray-50 disabled:cursor-not-allowed " v-model="g.grad_name" :disabled="activeEditCell==index+1? false:true" title="Click Edit to modify details" required/>
                                 </div>
+                                <div class="w-full flex flex-col gap-2">
+                                    <p class="text-xs font-semibold italic">Program Type</p>
+                                    <select class="w-full border border-gray-300 p-2 text-xs disabled:shadow-inner rounded-md disabled:bg-gray-50 disabled:cursor-not-allowed " 
+                                            v-model="g.grad_dtypeid"
+                                            title="Click Edit to modify details" required>
+                                        <option value="" disabled>-- Select Program --</option>
+                                        <option v-for="(p, index) in program" :value="p.dtype_id">{{ p.dtype_desc }}</option>
+
+                                    </select>
+                                </div>
+                                
                             </div>
                         </div>
                         <div class="basis-1/4 flex flex-col gap-2 justify-center items-center">

@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\RegistrarController;
+use App\Http\Controllers\AddressController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -34,6 +35,8 @@ Route::middleware(['auth:sanctum'])->get('/get-roomtype', [RegistrarController::
 Route::middleware(['auth:sanctum'])->get('/get-buildingtype', [RegistrarController::class,'getBuildingType']);
 Route::middleware(['auth:sanctum'])->get('/get-department', [RegistrarController::class,'getDepartment']);
 Route::middleware(['auth:sanctum'])->get('/get-degree', [RegistrarController::class,'getDegree']);
+Route::middleware(['auth:sanctum'])->get('/get-program-list', [RegistrarController::class,'getProgramList']);
+Route::middleware(['auth:sanctum'])->get('/get-curriculum', [RegistrarController::class,'getCurriculum']);
 
 Route::middleware(['auth:sanctum'])->post('/save-section', [RegistrarController::class,'saveSection']);
 Route::middleware(['auth:sanctum'])->post('/save-gradelvl', [RegistrarController::class,'saveGradelvl']);
@@ -47,6 +50,23 @@ Route::middleware(['auth:sanctum'])->post('/add-gradelvl', [RegistrarController:
 Route::middleware(['auth:sanctum'])->post('/add-subject', [RegistrarController::class,'addSubject']);
 Route::middleware(['auth:sanctum'])->post('/add-department', [RegistrarController::class,'addDepartment']);
 Route::middleware(['auth:sanctum'])->post('/add-classroom', [RegistrarController::class,'addClassroom']);
+Route::middleware(['auth:sanctum'])->post('/add-curriculum', [RegistrarController::class,'addCurriculum']);
+Route::middleware(['auth:sanctum'])->get('/get-applicant', [RegistrarController::class,'getApplicant']);
+Route::middleware(['auth:sanctum'])->get('/get-gender', [RegistrarController::class,'getGender']);
+Route::middleware(['auth:sanctum'])->get('/get-nationality', [RegistrarController::class,'getNationality']);
+Route::middleware(['auth:sanctum'])->get('/get-civilstatus', [RegistrarController::class,'getCivilStatus']);
+
+
+Route::middleware(['auth:sanctum'])->get('/get-region', [AddressController::class,'getRegion']);
+Route::middleware(['auth:sanctum'])->get('/get-province', [AddressController::class,'getProvince']);
+Route::middleware(['auth:sanctum'])->get('/get-city', [AddressController::class,'getCity']);
+Route::middleware(['auth:sanctum'])->get('/get-barangay', [AddressController::class,'getBarangay']);
+
+Route::middleware(['auth:sanctum'])->post('/add-applicant/{type}', [RegistrarController::class,'addApplicant']);
+Route::middleware(['auth:sanctum'])->get('/get-family/{personid}', [RegistrarController::class,'getFamily']);
+Route::middleware(['auth:sanctum'])->get('/get-award/{personid}', [RegistrarController::class,'getAward']);
+Route::middleware(['auth:sanctum'])->get('/get-attainment/{personid}', [RegistrarController::class,'getAttainment']);
+
 
 
 

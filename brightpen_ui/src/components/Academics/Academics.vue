@@ -16,59 +16,114 @@ import AddNewClassroom from '../snippets/modals/RegFormClassroom.vue';
 import AddNewSubject from '../snippets/modals/RegFormSubject.vue';
 import AddNewDepartment from '../snippets/modals/RegFormDepartment.vue';
 import AddNewCurriculum from '../snippets/modals/RegFormCurriculum.vue';
+import AddNewApplicant from '../snippets/modals/RegFormApplicant.vue';
+import Applicant from './Applicants/ApplicantForm.vue';
 
 const def_class = ref("flex items-center w-full rounded-lg cursor-pointer hover:bg-emerald-400 hover:text-gray-100 p-2");
 const active_class = ref("flex items-center w-full rounded-lg cursor-pointer bg-emerald-600 hover:bg-emerald-500 text-gray-100 p-2");
 const content = ref(1)
 const modal = ref(false)
 
-const programDefs = ref([])
-const degreeDefs = ref([])
-const semesterDefs = ref([])
+// for courses
+const co_prog = ref([])
+const co_deg = ref([])
+const co_sem = ref([])
 
-const roomDefs = ref([])
-const buildingDefs = ref([])
+//for classrooms
+const cl_rms = ref([])
+const cl_buil = ref([])
 
-const showModal = (program, degree, semester, roomtypes, building)=>{
+//for curriculum
+const cu_prog = ref([])
+const cu_grdlvl = ref([])
+const cu_quar = ref([])
+const cu_cour = ref([])
+
+// for adding new applicant modal defaults
+const genderData = ref([])
+const nationalityData = ref([])
+const regionData = ref([])
+const cityData = ref([])
+const provinceData = ref([])
+const barangayData = ref([])
+const civilstatusData = ref([])
+
+const showModal = (co_1, co_2, co_3, cl_1, cl_2, cu_1, cu_2, cu_3, cu_4 )=>{
    modal.value = !modal.value
 
    // for courses
-   programDefs.value = program
-   degreeDefs.value = degree
-   semesterDefs.value = semester
+   co_prog.value = co_1
+   co_deg.value = co_2
+   co_sem.value = co_3
 
    //for classrooms
-   roomDefs.value = roomtypes
-   buildingDefs.value = building
-   
+   cl_rms.value = cl_1
+   cl_buil.value = cl_2
+
+   //for curriculum
+   cu_prog.value = cu_1
+   cu_grdlvl.value = cu_2
+   cu_quar.value = cu_3
+   cu_cour.value = cu_4
 }
+
+const showApplicantModal = (gender, nationality, region, civilstatus, province, city, barangay)=>{
+
+   modal.value = !modal.value
+
+   genderData.value =  gender
+   nationalityData.value =  nationality
+   regionData.value =  region
+   cityData.value =  city
+   provinceData.value =  province
+   barangayData.value =  barangay
+   civilstatusData.value =  civilstatus
+
+
+}
+
+
+const setPage = (page) =>{
+   window.stop() // stop request
+   content.value = page
+}
+
 
 </script>
 <template>
    <div class="flex flex-col w-full h-full">
-
-
       <Transition name="slide-fade" mode="out-in">
-         <AddNewProgram v-if="modal && content == 1" :program="programDefs" :degree="degreeDefs" :semester="semesterDefs" @close-modal="showModal"/>
+         <AddNewApplicant v-if="modal && content == 1" @close-modal="showApplicantModal"
+                                 :genderprop="genderData"
+                                 :nationalityprop="nationalityData"
+                                 :regionprop="regionData"
+                                 :cityprop="cityData"
+                                 :provinceprop="provinceData"
+                                 :barangayprop="barangayData"
+                                 :civilstatusprop="civilstatusData"/>
       </Transition>
       <Transition name="slide-fade" mode="out-in">
-         <AddNewSection v-if="modal && content == 2" @close-modal="showModal"/>
+         <AddNewProgram v-if="modal && content == 2" :program="co_prog" :degree="co_deg" :semester="co_sem" @close-modal="showModal"/>
       </Transition>
       <Transition name="slide-fade" mode="out-in">
-         <AddNewYearLevel v-if="modal && content == 3" @close-modal="showModal"/>
+         <AddNewSection v-if="modal && content == 3" @close-modal="showModal"/>
       </Transition>
       <Transition name="slide-fade" mode="out-in">
-         <AddNewClassroom v-if="modal && content == 4" :roomtypes="roomDefs" :building="buildingDefs" @close-modal="showModal"/>
+         <AddNewYearLevel v-if="modal && content == 4" @close-modal="showModal"/>
       </Transition>
       <Transition name="slide-fade" mode="out-in">
-         <AddNewSubject v-if="modal && content == 5" @close-modal="showModal"/>
+         <AddNewClassroom v-if="modal && content == 5" :roomtypes="cl_rms" :building="cl_buil" @close-modal="showModal"/>
+      </Transition>
+      <Transition name="slide-fade" mode="out-in">
+         <AddNewSubject v-if="modal && content == 6" @close-modal="showModal"/>
       </Transition>
       <Transition name="slide-fade" mode="out-in">
          <AddNewDepartment v-if="modal && content == 7" @close-modal="showModal"/>
       </Transition>
       <Transition name="slide-fade" mode="out-in">
-         <AddNewCurriculum v-if="modal && content == 8" @close-modal="showModal"/>
+         <AddNewCurriculum v-if="modal && content == 8" :program="cu_prog" :gradelvl="cu_grdlvl" :quarter="cu_quar" :course="cu_cour" @close-modal="showModal"/>
       </Transition>
+      
 
       <div class="h-28"></div>
       <div class="flex gap-2 w-full h-full">
@@ -78,30 +133,34 @@ const showModal = (program, degree, semester, roomtypes, building)=>{
                <h3 class="text-md font-semibold">Selection</h3>
             </div>
             <div class="flex flex-col gap-2 p-1">
-               <div :class="content == 1? active_class:def_class" @click="content = 1">
+               <div :class="content == 1? active_class:def_class" @click="setPage(1)">
+                  <p class="text-xs">Applicant</p>
+               </div>
+               <div :class="content == 2? active_class:def_class" @click="setPage(2)">
                   <p class="text-xs">Programs</p>
                </div>
-               <div :class="content == 2? active_class:def_class" @click="content = 2">
+               <div :class="content == 3? active_class:def_class" @click="setPage(3)">
                   <p class="text-xs">Section</p>
                </div>
-               <div :class="content == 3? active_class:def_class" @click="content = 3">
+               <div :class="content == 4? active_class:def_class" @click="setPage(4)">
                   <p class="text-xs">Grade Levels</p>
                </div>
-               <div :class="content == 4? active_class:def_class" @click="content = 4">
+               <div :class="content == 5? active_class:def_class" @click="setPage(5)">
                   <p class="text-xs">Classrooms</p>
                </div>
-               <div :class="content == 5? active_class:def_class" @click="content = 5">
+               <div :class="content == 6? active_class:def_class" @click="setPage(6)">
                   <p class="text-xs">Subjects</p>
                </div>
-               <!-- <div :class="content == 6? active_class:def_class" @click="content = 6">
+               <!-- <div :class="content == 6? active_class:def_class" @click="setPage(6)">
                   <p class="text-xs">Faculties</p>
                </div> -->
-               <div :class="content == 7? active_class:def_class" @click="content = 7">
+               <div :class="content == 7? active_class:def_class" @click="setPage(7)">
                   <p class="text-xs">Departments</p>
                </div>
-               <div :class="content == 8? active_class:def_class" @click="content = 8">
+               <div :class="content == 8? active_class:def_class" @click="setPage(8)">
                   <p class="text-xs">Curriculum</p>
                </div>
+               
             </div>
            
          </div>
@@ -111,23 +170,26 @@ const showModal = (program, degree, semester, roomtypes, building)=>{
             </div>
             <div class="w-full p-2">
                   <div v-if="content == 1">
+                     <Applicant @add-modal="showApplicantModal"/>
+                  </div>
+                  <div v-if="content == 2">
                      <!-- <Programs/> -->
                      <Courses @add-modal="showModal"/>
                   </div>
               
-                  <div v-if="content == 2">
+                  <div v-if="content == 3">
                      <Sections @add-modal="showModal"/>
                   </div>
           
-                  <div v-if="content == 3">
+                  <div v-if="content == 4">
                      <YearLevels @add-modal="showModal"/>
                   </div>
              
-                  <div v-if="content == 4">
+                  <div v-if="content == 5">
                      <Classrooms @add-modal="showModal"/>
                   </div>
              
-                  <div v-if="content == 5">
+                  <div v-if="content == 6">
                      <Subjects @add-modal="showModal"/>
                   </div>
                   <!-- <div v-if="content == 6">
@@ -139,6 +201,7 @@ const showModal = (program, degree, semester, roomtypes, building)=>{
                   <div v-if="content == 8">
                      <Curriculum @add-modal="showModal"/>
                   </div>
+                  
                   
             </div>
          </div>

@@ -15,6 +15,24 @@ const getGradelvl = async (type) => {
         return 500
     }
 }
+
+let program = {}
+const getProgram = async () => {
+
+    try{
+        await axios({
+            method: "GET",
+            url: 'api/get-program/',
+        }).then(async (results) => {
+            console.log(results.data)
+            program = results.data
+        })
+        return program
+    }catch(err){
+        return err
+    }
+}
+
 let response = {}
 const saveGradelvl = async (data) => {
     try{
@@ -53,5 +71,6 @@ const addGradelvl = async (data) => {
 export {
     getGradelvl,
     saveGradelvl,
-    addGradelvl
+    addGradelvl,
+    getProgram
 }

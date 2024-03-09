@@ -17,6 +17,7 @@ const search = ref('')
 const temp = ref([])
 const isLoading = ref(false)
 
+
 onMounted(async () => {
 
     isLoading.value = true
@@ -32,6 +33,7 @@ onMounted(async () => {
 
         }).catch((err) => {
             alert('error loading the list programs')
+            emit('done-loading', 204)
         })
 
     }).catch((err) => {
@@ -58,6 +60,8 @@ const prog_id = ref('')
 const reloadPage = ()=>{
     location.reload()
 }
+
+
 
 </script>
 
