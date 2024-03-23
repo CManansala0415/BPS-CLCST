@@ -91,11 +91,11 @@ onMounted(async () => {
         permanentAddress.value.per_perm_province = prProvince.value
         permanentAddress.value.per_perm_city = prCity.value
         permanentAddress.value.per_perm_barangay = prBarangay.value
-        homeDisabler.value = true
-        regionDisabler.value = true
-        provinceDisabler.value = true
-        cityDisabler.value = true
-        barangayDisabler.value = true
+        // homeDisabler.value = true
+        // regionDisabler.value = true
+        // provinceDisabler.value = true
+        // cityDisabler.value = true
+        // barangayDisabler.value = true
         zipcodeDisabler.value = true
 
     }
@@ -162,7 +162,8 @@ const transferData = () =>{
             <p class="text-xs">Home</p> 
             <input type="text" @focusout="updateAddress('home',permanentAddress.per_perm_home)"  
                                 :disabled="homeDisabler?true:false"
-                                v-model="permanentAddress.per_perm_home" class="border border-gray-300 p-2 text-xs rounded-md disabled:shadow-inner disabled:bg-gray-50 disabled:cursor-not-allowed " required/>
+                                v-model="permanentAddress.per_perm_home" 
+                                class="border border-gray-300 p-2 text-xs rounded-md disabled:shadow-inner disabled:bg-gray-50 disabled:cursor-not-allowed " required/>
         </div> 
         <div class="flex flex-col gap-1 h-full">
             <p class="text-xs">Region</p> 

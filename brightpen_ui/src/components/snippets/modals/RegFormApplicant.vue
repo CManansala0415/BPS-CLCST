@@ -90,6 +90,7 @@ const award = ref([])
 const attainment = ref([])
 
 onMounted(async () => {
+    // window.stop()
     getUserID().then((results) => {
         user.value = results.data.name
         userID.value = results.data.id

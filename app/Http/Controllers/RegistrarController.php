@@ -333,12 +333,44 @@ class RegistrarController extends Controller
     }
 
 
-    public function getApplicant()
+    public function getApplicant($limit, $offset, $search)
     {
+        
+        if($search==204){
+            $applicant = DB::table('def_person')->where('per_status', '=',  1)->orderBy('per_id','DESC')->limit($limit)->offset($offset)->get();
+            $count = DB::table('def_person')->count();
+        }
+        else{
+             $applicant = DB::table('def_person')->orderBy('per_id','DESC')
+                        ->where('per_status', '=',  1)
+                        ->where(function($query) use ($search) {
+                            $query->where('per_firstname', 'like',  '%' . $search .'%')
+                            ->orWhere('per_middlename', 'like',  '%' . $search .'%')
+                            ->orWhere('per_lastname', 'like',  '%' . $search .'%')
+                            ->orWhere('per_suffixname', 'like',  '%' . $search .'%')
+                            ->orWhere('per_dateapplied', 'like',  '%' . $search .'%');
+                        })
+                        ->limit($limit)->offset($offset)
+                        ->get();
+            $count =  DB::table('def_person')->orderBy('per_id','DESC')
+                        ->where('per_status', '=',  1)
+                        ->where(function($query) use ($search) {
+                            $query->where('per_firstname', 'like',  '%' . $search .'%')
+                            ->orWhere('per_middlename', 'like',  '%' . $search .'%')
+                            ->orWhere('per_lastname', 'like',  '%' . $search .'%')
+                            ->orWhere('per_suffixname', 'like',  '%' . $search .'%')
+                            ->orWhere('per_dateapplied', 'like',  '%' . $search .'%');
+                        })
+                        ->limit($limit)->offset($offset)
+                        ->count();       
+        }
 
-        $applicant = DB::table('def_person')->orderBy('per_id')
-        ->get();
-        return $applicant; 
+        return $data = [
+            'data' => $applicant,
+            'count' => $count,
+        ];
+        // return $applicant; 
+        
         // date_default_timezone_set('Asia/Manila');
         // $date = date('Y/m/d h:i:s a', time());
         // return $date;
@@ -415,9 +447,10 @@ class RegistrarController extends Controller
 
                 $randomizer = uniqid();
 
-                $famid = 'fam-' . $format1 . $format2 . $format3 . '-' .  $randomizer;
-                $awrid = 'awr-' .$format1 . $format2 . $format3 . '-' .  $randomizer;
-                $attid = 'att-' .$format1 . $format2 . $format3 . '-' .  $randomizer;
+                $famid = 'fam-' .strtoupper($format1) . strtoupper($format2) . strtoupper($format3) . '-' .  $randomizer;
+                $awrid = 'awr-' .strtoupper($format1) . strtoupper($format2) . strtoupper($format3) . '-' .  $randomizer;
+                $attid = 'att-' .strtoupper($format1) . strtoupper($format2) . strtoupper($format3) . '-' .  $randomizer;
+                $perid = 'per-' .strtoupper($format1) . strtoupper($format2) . strtoupper($format3) . '-' .  $randomizer;
 
                 try{
                     //date time saving last to fix naten
@@ -452,6 +485,7 @@ class RegistrarController extends Controller
                         'per_educid' => $awrid,
                         'per_famid' => $famid,
                         'per_attainmentid' => $attid,
+                        'per_personid' => $perid,
                         'per_regtype' => $request->input('per_regtype'),
                         'per_dateapplied' =>$date,
                         'per_user' =>$request->input('per_user'),
@@ -536,5 +570,232 @@ class RegistrarController extends Controller
         }
     }
 
+    public function updateApplicant(Request $req)
+    {
+        try{
+            date_default_timezone_set('Asia/Manila');
+            $date = date('Y-m-d h:i:s', time());
+            $s1 = DB::table('def_person')
+                ->where('per_id','=', $req['per_id'])
+                ->update([
+                    "per_id" => $req['per_id'],
+                    "per_firstname" => $req['per_firstname'],
+                    "per_middlename" => $req['per_middlename'],
+                    "per_lastname" => $req['per_lastname'],
+                    "per_suffixname" => $req['per_suffixname'],
+                    "per_birthday" => $req['per_birthday'],
+                    "per_birth_province" => $req['per_birth_province'],
+                    "per_birth_city" => $req['per_birth_city'],
+                    "per_birth_zipcode" => $req['per_birth_zipcode'],
+                    "per_gender" => $req['per_gender'],
+                    "per_civilstatus" => $req['per_civilstatus'],
+                    "per_nationality" => $req['per_nationality'],
+                    "per_contact" => $req['per_contact'],
+                    "per_email" => $req['per_email'],
+                    "per_curr_home" => $req['per_curr_home'],
+                    "per_curr_country" => $req['per_curr_country'],
+                    "per_curr_region" => $req['per_curr_region'],
+                    "per_curr_province" => $req['per_curr_province'],
+                    "per_curr_city" => $req['per_curr_city'],
+                    "per_curr_barangay" => $req['per_curr_barangay'],
+                    "per_curr_zipcode" => $req['per_curr_zipcode'],
+                    "per_perm_home" => $req['per_perm_home'],
+                    "per_perm_country" => $req['per_perm_country'],
+                    "per_perm_region" => $req['per_perm_region'],
+                    "per_perm_province" => $req['per_perm_province'],
+                    "per_perm_city" => $req['per_perm_city'],
+                    "per_perm_barangay" => $req['per_perm_barangay'],
+                    "per_perm_zipcode" => $req['per_perm_zipcode'],
+                    "per_regtype" => $req['per_regtype'],
+                    "per_updatedby" =>$req['per_user'],
+                    "per_dateupdated" => $date,
+                ]);
+            
+            return $data = [
+                'status' => 204,
+            ];
+        }
+        catch (Exception $ex) {
+            return $data = [
+                'status' => 500,
+            ];
+        }
+        
+       
+    }
+
+    public function deleteApplicant(Request $req)
+    {
+        try{
+            $s1 = DB::table('def_person')
+                ->where('per_id','=', $req['per_id'])
+                ->update([
+                    "per_status" => 0,
+                ]);
+            
+            return $data = [
+                'status' => 204,
+            ];
+        }
+        catch (Exception $ex) {
+            return $data = [
+                'status' => 500,
+            ];
+        }
+        
+       
+    }
+
+    public function enrollApplicant(Request $request)
+    {
+       try{
+            date_default_timezone_set('Asia/Manila');
+            $date = date('Y-m-d h:i:s', time());
+
+            $primary = DB::table('def_enrollment')->insert([
+                'enr_enrby' => $request->input('userid'),
+                'enr_personid' => $request->input('personid'),
+                'enr_gradelvl' => $request->input('gradelvl'),
+                'enr_program' => $request->input('program'),
+                'enr_quarter' => $request->input('quarter'),
+                'enr_course' => $request->input('course'),
+                'enr_dateenrolled' => $date
+            ]);
+            return 204;
+        }
+        catch (Exception $ex) {
+            return 500;
+        }
+    }
+
+    public function getEnrollment($id)
+    {
+       
+        $enrollment = DB::table('def_enrollment')
+        ->where('enr_personid', '=' , $id)
+        ->first();
+        return $enrollment; 
+       
+    }
+
+
+
+
+
+    public function getStudent($limit, $offset, $search)
+    {
+        if($search==204){
+
+            $student = DB::table('def_enrollment')
+            ->leftJoin('def_person', 'def_enrollment.enr_personid', '=', 'def_person.per_personid') 
+            ->select(  
+                'def_enrollment.*',
+                'def_person.*',
+            )->orderBy('def_person.per_id','DESC')
+            ->limit($limit)
+            ->offset($offset)
+            ->get();
+                            
+
+            $count = DB::table('def_enrollment')
+            ->leftJoin('def_person', 'def_enrollment.enr_personid', '=', 'def_person.per_personid') 
+            ->select(  
+                'def_enrollment.*',
+                'def_person.*',
+            )->count();
+        }
+        else{
+             $student = DB::table('def_enrollment')
+                        ->leftJoin('def_person', 'def_enrollment.enr_personid', '=', 'def_person.per_personid') 
+                        ->select(  
+                            'def_enrollment.*',
+                            'def_person.*',
+                        )->orderBy('def_person.per_id','DESC')
+                        ->where('per_status', '=',  1)
+                        ->where(function($query) use ($search) {
+                            $query->where('per_firstname', 'like',  '%' . $search .'%')
+                            ->orWhere('per_middlename', 'like',  '%' . $search .'%')
+                            ->orWhere('per_lastname', 'like',  '%' . $search .'%')
+                            ->orWhere('per_suffixname', 'like',  '%' . $search .'%')
+                            ->orWhere('per_dateapplied', 'like',  '%' . $search .'%');
+                        })
+                        ->limit($limit)->offset($offset)
+                        ->get();
+            $count =  DB::table('def_enrollment')
+                        ->leftJoin('def_person', 'def_enrollment.enr_personid', '=', 'def_person.per_personid') 
+                        ->select(  
+                            'def_enrollment.*',
+                            'def_person.*',
+                        )->orderBy('def_person.per_id','DESC')
+                        ->where('per_status', '=',  1)
+                        ->where(function($query) use ($search) {
+                            $query->where('per_firstname', 'like',  '%' . $search .'%')
+                            ->orWhere('per_middlename', 'like',  '%' . $search .'%')
+                            ->orWhere('per_lastname', 'like',  '%' . $search .'%')
+                            ->orWhere('per_suffixname', 'like',  '%' . $search .'%')
+                            ->orWhere('per_dateapplied', 'like',  '%' . $search .'%');
+                        })
+                        ->limit($limit)->offset($offset)
+                        ->count();       
+        }
+
+        return $data = [
+            'data' => $student,
+            'count' => $count,
+        ];
+    }
+
+    public function getStudentByCourse($limit, $offset, $search)
+    {
+        if($search==204){
+
+            $student = DB::table('def_enrollment')
+            ->leftJoin('def_person', 'def_enrollment.enr_personid', '=', 'def_person.per_personid') 
+            ->select(  
+                'def_enrollment.*',
+                'def_person.*',
+            )->orderBy('def_person.per_id','DESC')
+            ->limit($limit)
+            ->offset($offset)
+            ->get();
+                            
+
+            $count = DB::table('def_enrollment')
+            ->leftJoin('def_person', 'def_enrollment.enr_personid', '=', 'def_person.per_personid') 
+            ->select(  
+                'def_enrollment.*',
+                'def_person.*',
+            )->count();
+        }
+        else{
+             $student = DB::table('def_enrollment')
+                        ->leftJoin('def_person', 'def_enrollment.enr_personid', '=', 'def_person.per_personid') 
+                        ->select(  
+                            'def_enrollment.*',
+                            'def_person.*',
+                        )->orderBy('def_person.per_id','DESC')
+                        ->where('per_status', '=',  1)
+                        ->where('enr_course', '=',  $search)
+                        ->limit($limit)->offset($offset)
+                        ->get();
+            $count =  DB::table('def_enrollment')
+                        ->leftJoin('def_person', 'def_enrollment.enr_personid', '=', 'def_person.per_personid') 
+                        ->select(  
+                            'def_enrollment.*',
+                            'def_person.*',
+                        )->orderBy('def_person.per_id','DESC')
+                        ->where('per_status', '=',  1)
+                        ->where('enr_course', '=',  $search)
+                        ->limit($limit)->offset($offset)
+                        ->count();       
+        }
+
+        return $data = [
+            'data' => $student,
+            'count' => $count,
+        ];
+    }
+    
+    
     
 }

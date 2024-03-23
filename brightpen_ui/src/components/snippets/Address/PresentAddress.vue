@@ -89,11 +89,11 @@ onMounted(async () => {
         presentAddress.value.per_curr_province = prProvince.value
         presentAddress.value.per_curr_city = prCity.value
         presentAddress.value.per_curr_barangay = prBarangay.value
-        homeDisabler.value = true
-        regionDisabler.value = true
-        provinceDisabler.value = true
-        cityDisabler.value = true
-        barangayDisabler.value = true
+        // homeDisabler.value = true
+        // regionDisabler.value = true
+        // provinceDisabler.value = true
+        // cityDisabler.value = true
+        // barangayDisabler.value = true
         zipcodeDisabler.value = true
 
     }
@@ -167,7 +167,8 @@ const transferData = () =>{
             </p> 
             <input @focusout="updateAddress('home',presentAddress.per_curr_home)"  
                     :disabled="homeDisabler?true:false"
-                    type="text" v-model="presentAddress.per_curr_home" class="border border-gray-300 p-2 text-xs rounded-md disabled:shadow-inner disabled:bg-gray-50 disabled:cursor-not-allowed " required/>
+                    type="text" v-model="presentAddress.per_curr_home" 
+                    class="border border-gray-300 p-2 text-xs rounded-md disabled:shadow-inner disabled:bg-gray-50 disabled:cursor-not-allowed " required/>
         </div> 
         <div class="flex flex-col gap-1 h-full">
             <p class="text-xs">Region
@@ -177,7 +178,7 @@ const transferData = () =>{
             <select @change="updateAddress('region',presentAddress.per_curr_region)" 
                     v-model="presentAddress.per_curr_region" class="w-full border border-gray-300 p-2 text-xs disabled:shadow-inner rounded-md disabled:bg-gray-50 disabled:cursor-not-allowed " 
                     title="Click Edit to modify details" 
-                    :disabled="regionDisabler?true:false">
+                    :disabled="regionDisabler?true:false" required>
                 <option value="" disabled>-- Select region --</option>
                 <option v-for="(r, index) in region" :value="r.regCode">{{ r.regDesc }}</option>
             </select>
@@ -190,7 +191,7 @@ const transferData = () =>{
             <select @change="updateAddress('province',presentAddress.per_curr_province)" 
                     v-model="presentAddress.per_curr_province" class="w-full border border-gray-300 p-2 text-xs disabled:shadow-inner rounded-md disabled:bg-gray-50 disabled:cursor-not-allowed " 
                     title="Select Region First" 
-                    :disabled="provinceDisabler?true:false">
+                    :disabled="provinceDisabler?true:false" required>
                 <option value="" disabled>-- Select Province --</option>
                 <option v-for="(p, index) in filteredProvince" :value="p.provCode">{{ p.provDesc }}</option>
             </select>
@@ -203,7 +204,7 @@ const transferData = () =>{
             <select @change="updateAddress('city',presentAddress.per_curr_city)" 
                     v-model="presentAddress.per_curr_city" class="w-full border border-gray-300 p-2 text-xs disabled:shadow-inner rounded-md disabled:bg-gray-50 disabled:cursor-not-allowed " 
                     title="Select City First" 
-                    :disabled="cityDisabler?true:false">
+                    :disabled="cityDisabler?true:false" required>
                 <option value="" disabled>-- Select City --</option>
                 <option v-for="(c, index) in filteredCity" :value="c.citymunCode">{{ c.citymunDesc }}</option>
             </select>
@@ -216,7 +217,7 @@ const transferData = () =>{
             <select @change="updateAddress('barangay',presentAddress.per_curr_barangay)"
                     v-model="presentAddress.per_curr_barangay" class="w-full border border-gray-300 p-2 text-xs disabled:shadow-inner rounded-md disabled:bg-gray-50 disabled:cursor-not-allowed " 
                     title="Select Barangay First" 
-                    :disabled="barangayDisabler?true:false">
+                    :disabled="barangayDisabler?true:false" required>
                 <option value="" disabled>-- Select Barangay --</option>
                 <option v-for="(b, index) in filteredBarangay" :value="b.id">{{ b.brgyDesc }}</option>
                 

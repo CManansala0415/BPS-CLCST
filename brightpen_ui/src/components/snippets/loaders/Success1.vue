@@ -23,7 +23,7 @@ const props = defineProps({
     </div>
 </template>
 <style>
-.success-checkmark {
+/* .success-checkmark {
     width: 80px;
     height: 115px;
     margin: 0 auto;
@@ -175,5 +175,5 @@ const props = defineProps({
         right: 8px;
         top: 38px;
     }
-}
+} */
 </style>

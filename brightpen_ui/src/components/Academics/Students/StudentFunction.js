@@ -1,22 +1,5 @@
 import axios from 'axios';
 
-let curriculum = {}
-const getCurriculum = async (type) => {
-    try{
-        await axios({
-            method: "GET",
-            url: 'api/get-curriculum/',
-        }).then(async (results) => {
-            // console.log(results.data)
-            curriculum = results.data
-        })
-        return curriculum
-    }catch(err){
-        return 500
-    }
-}
-
-
 let gradelvl = {}
 const getGradelvl = async (type) => {
     try{
@@ -83,47 +66,86 @@ const getProgramList = async () => {
         return err
     }
 }
-
-let response = {}
-const addCurriculum = async (data) => {
-    try{
-        await axios({
-            method: "POST",
-            url: 'api/add-curriculum/',
-            data:data
-
-        }).then(async (results) => {
-            response = results.data
-        })
-        return response
-    }catch(err){
-        return 500
+let student = {}
+const getStudent = async (limit, offset, id) => {
+    let search = id
+    if(!id){
+        search = 204
     }
-}
-
-let subjects = {}
-const getSubject = async (type) => {
     try{
         await axios({
             method: "GET",
-            url: 'api/get-subject/',
+            url: 'api/get-student/'+limit+'/'+offset+'/'+search,
         }).then(async (results) => {
             // console.log(results.data)
-            subjects = results.data
+            student = results.data
         })
-        return subjects
+        return student
+    }catch(err){
+        return err
+    }
+}
+
+let studentbycourse = {}
+const getStudentByCourse = async (limit, offset, id) => {
+    let search = id
+    if(!id){
+        search = 204
+    }
+    try{
+        await axios({
+            method: "GET",
+            url: 'api/get-student-by-course/'+limit+'/'+offset+'/'+search,
+        }).then(async (results) => {
+            // console.log(results.data)
+            studentbycourse = results.data
+        })
+        return studentbycourse
+    }catch(err){
+        return err
+    }
+}
+
+let uploadprofile = {}
+const uploadProfile = async (data) => {
+    try{
+        await axios({
+            method: "POST",
+            url: 'api/upload-profile/',
+            data:data
+
+        }).then(async (results) => {
+            uploadprofile = results.data
+        })
+        return uploadprofile
     }catch(err){
         return 500
     }
 }
 
+let uploadlink = {}
+const uploadLink = async (data) => {
+    try{
+        await axios({
+            method: "POST",
+            url: 'api/upload-link/',
+            data:data
 
+        }).then(async (results) => {
+            uploadlink = results.data
+        })
+        return uploadlink
+    }catch(err){
+        return 500
+    }
+}
 export {
-    addCurriculum,
-    getCurriculum,
-    getProgram,
+    getStudent,
+    getStudentByCourse,
     getQuarter,
-    getProgramList,
     getGradelvl,
-    getSubject
+    getProgram,
+    getProgramList,
+    uploadProfile,
+    uploadLink
 }

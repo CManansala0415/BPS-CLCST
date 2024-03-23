@@ -50,7 +50,7 @@ onMounted(async () => {
     if(bdayProv.value && bdayCity.value){
         birthplaceAddress.value.per_birth_province = bdayProv.value
         birthplaceAddress.value.per_birth_city = bdayCity.value
-        provinceDisabler.value = true
+        // provinceDisabler.value = true
         zipcodeDisabler.value = true
     }
  
@@ -93,7 +93,7 @@ const transferData = () =>{
         <select @change="updateAddress('province',birthplaceAddress.per_birth_province)" 
                 :disabled="provinceDisabler?true:false"
                 v-model="birthplaceAddress.per_birth_province" class="w-full border border-gray-300 p-2 text-xs disabled:shadow-inner rounded-md disabled:bg-gray-50 disabled:cursor-not-allowed " 
-                title="Select Province" >
+                title="Select Province"  required>
             <option value="" disabled>-- Select Province --</option>
             <option v-for="(p, index) in province" :value="p.provCode">{{ p.provDesc }}</option>
         </select>
@@ -106,7 +106,7 @@ const transferData = () =>{
         <select @change="updateAddress('city',birthplaceAddress.per_birth_city)" 
                 v-model="birthplaceAddress.per_birth_city" class="w-full border border-gray-300 p-2 text-xs disabled:shadow-inner rounded-md disabled:bg-gray-50 disabled:cursor-not-allowed " 
                 title="Select City First" 
-                :disabled="cityDisabler?true:false">
+                :disabled="cityDisabler?true:false" required>
             <option value="" disabled>-- Select City --</option>
             <option v-for="(c, index) in filteredCity" :value="c.citymunCode">{{ c.citymunDesc }}</option>
         </select>

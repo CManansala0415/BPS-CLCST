@@ -31,8 +31,8 @@ const searchvalue = ref('')
                     <button type="button" @click="$emit('add-new',true)" class="px-2 py-1.5 bg-emerald-500 text-xs text-white rounded-md hover:bg-emerald-400 disabled:bg-gray-200 disabled:cursor-not-allowed"><i class="fa-solid fa-plus mr-2"></i>Add New</button>
                 </div>
                 <div class="w-full sm:w-1/2 flex">
-                    <input type="text" v-model="searchvalue" class="w-full p-2 border-0 shadow-md text-xs disabled:bg-gray-200 disabled:cursor-not-allowed" placeholder="Search Here..."/>
-                    <button type="button" @click="$emit('toggle-search',searchData, addNew)" class="p-2 bg-emerald-400 shadow-md disabled:bg-gray-200 disabled:cursor-not-allowed text-xs text-white">Search</button>
+                    <input type="text" @keyup.enter="$emit('toggle-search',searchvalue)" v-model="searchvalue" class="w-full p-2 border-0 shadow-md text-xs disabled:bg-gray-200 disabled:cursor-not-allowed" placeholder="Search Here..."/>
+                    <button type="button" @click="$emit('toggle-search',searchvalue)" class="p-2 bg-emerald-400 shadow-md disabled:bg-gray-200 disabled:cursor-not-allowed text-xs text-white">Search</button>
                 </div>
             </div>
         </div>

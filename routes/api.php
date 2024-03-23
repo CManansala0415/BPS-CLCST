@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\RegistrarController;
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\FileManagement;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -51,7 +52,7 @@ Route::middleware(['auth:sanctum'])->post('/add-subject', [RegistrarController::
 Route::middleware(['auth:sanctum'])->post('/add-department', [RegistrarController::class,'addDepartment']);
 Route::middleware(['auth:sanctum'])->post('/add-classroom', [RegistrarController::class,'addClassroom']);
 Route::middleware(['auth:sanctum'])->post('/add-curriculum', [RegistrarController::class,'addCurriculum']);
-Route::middleware(['auth:sanctum'])->get('/get-applicant', [RegistrarController::class,'getApplicant']);
+Route::middleware(['auth:sanctum'])->get('/get-applicant/{limit}/{offset}/{search}', [RegistrarController::class,'getApplicant']);
 Route::middleware(['auth:sanctum'])->get('/get-gender', [RegistrarController::class,'getGender']);
 Route::middleware(['auth:sanctum'])->get('/get-nationality', [RegistrarController::class,'getNationality']);
 Route::middleware(['auth:sanctum'])->get('/get-civilstatus', [RegistrarController::class,'getCivilStatus']);
@@ -67,6 +68,14 @@ Route::middleware(['auth:sanctum'])->get('/get-family/{personid}', [RegistrarCon
 Route::middleware(['auth:sanctum'])->get('/get-award/{personid}', [RegistrarController::class,'getAward']);
 Route::middleware(['auth:sanctum'])->get('/get-attainment/{personid}', [RegistrarController::class,'getAttainment']);
 
+Route::middleware(['auth:sanctum'])->post('/update-applicant', [RegistrarController::class,'updateApplicant']);
+Route::middleware(['auth:sanctum'])->post('/delete-applicant', [RegistrarController::class,'deleteApplicant']);
+Route::middleware(['auth:sanctum'])->post('/enroll-applicant', [RegistrarController::class,'enrollApplicant']);
+Route::middleware(['auth:sanctum'])->get('/get-enrollment/{personid}', [RegistrarController::class,'getEnrollment']);
+Route::middleware(['auth:sanctum'])->get('/get-student/{limit}/{offset}/{search}', [RegistrarController::class,'getStudent']);
+Route::middleware(['auth:sanctum'])->post('/upload-profile', [FileManagement::class,'uploadProfile']);
+Route::middleware(['auth:sanctum'])->post('/upload-link', [FileManagement::class,'uploadLink']);
+Route::middleware(['auth:sanctum'])->get('/get-student-by-course/{limit}/{offset}/{search}', [RegistrarController::class,'getStudentByCourse']);
 
 
 

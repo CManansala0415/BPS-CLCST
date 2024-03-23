@@ -96,13 +96,13 @@ const setBirthplace = (data) =>{
                             <span v-if="!page1Data.per_firstname.length" class="text-xs text-red-500">*</span>
                             <span v-else class="text-xs text-emerald-500">&#x2714;</span>
                         </p> 
-                        <input type="text" v-model="page1Data.per_firstname" 
+                        <input type="text" v-model="page1Data.per_firstname"
                                            onkeydown="return /[a-z, ]/i.test(event.key)"
                                            class="border border-gray-300 p-2 text-xs rounded-md disabled:shadow-inner disabled:bg-gray-50 disabled:cursor-not-allowed " required/>
                     </div> 
                     <div class="flex flex-col gap-1 h-full">
                         <p class="text-xs">Middle Name</p> 
-                        <input type="text" v-model="page1Data.per_middlename" 
+                        <input type="text" v-model="page1Data.per_middlename"
                                            onkeydown="return /[a-z, ]/i.test(event.key)"
                                            class="border border-gray-300 p-2 text-xs rounded-md disabled:shadow-inner disabled:bg-gray-50 disabled:cursor-not-allowed " required/>
                     </div> 
@@ -111,13 +111,13 @@ const setBirthplace = (data) =>{
                             <span v-if="!page1Data.per_lastname.length" class="text-xs text-red-500">*</span>
                             <span v-else class="text-xs text-emerald-500">&#x2714;</span>
                         </p> 
-                        <input type="text" v-model="page1Data.per_lastname" 
+                        <input type="text" v-model="page1Data.per_lastname"
                                            onkeydown="return /[a-z, ]/i.test(event.key)"
                                            class="border border-gray-300 p-2 text-xs rounded-md disabled:shadow-inner disabled:bg-gray-50 disabled:cursor-not-allowed " required/>
                     </div> 
                     <div class="flex flex-col gap-1 h-full">
                         <p class="text-xs">Suffix Name</p> 
-                        <input type="text" v-model="page1Data.per_suffixname" 
+                        <input type="text" v-model="page1Data.per_suffixname"
                                            onkeydown="return /[a-z, ]/i.test(event.key)"
                                            maxlength="3"
                                            class="border border-gray-300 p-2 text-xs rounded-md disabled:shadow-inner disabled:bg-gray-50 disabled:cursor-not-allowed " required/>

@@ -24,7 +24,7 @@ const getProgram = async () => {
             method: "GET",
             url: 'api/get-program/',
         }).then(async (results) => {
-            console.log(results.data)
+            // console.log(results.data)
             program = results.data
         })
         return program

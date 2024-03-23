@@ -17,7 +17,9 @@ import AddNewSubject from '../snippets/modals/RegFormSubject.vue';
 import AddNewDepartment from '../snippets/modals/RegFormDepartment.vue';
 import AddNewCurriculum from '../snippets/modals/RegFormCurriculum.vue';
 import AddNewApplicant from '../snippets/modals/RegFormApplicant.vue';
+import Enrollment from '../snippets/modals/Enrollment.vue';
 import Applicant from './Applicants/ApplicantForm.vue';
+import Students from './Students/Students.vue';
 
 const def_class = ref("flex items-center w-full rounded-lg cursor-pointer hover:bg-emerald-400 hover:text-gray-100 p-2");
 const active_class = ref("flex items-center w-full rounded-lg cursor-pointer bg-emerald-600 hover:bg-emerald-500 text-gray-100 p-2");
@@ -79,9 +81,19 @@ const showApplicantModal = (gender, nationality, region, civilstatus, province, 
    barangayData.value =  barangay
    civilstatusData.value =  civilstatus
 
-
 }
 
+const enroll = ref(false)
+const personData = ref([])
+const personAttainment = ref([])
+const showEnrollmentModal = (data, attainment)=>{
+
+   modal.value = !modal.value
+   personData.value=data
+   personAttainment.value=attainment
+   enroll.value = !enroll.value
+
+}
 
 const setPage = (page) =>{
    window.stop() // stop request
@@ -93,7 +105,7 @@ const setPage = (page) =>{
 <template>
    <div class="flex flex-col w-full h-full">
       <Transition name="slide-fade" mode="out-in">
-         <AddNewApplicant v-if="modal && content == 1" @close-modal="showApplicantModal"
+         <AddNewApplicant v-if="modal && content == 1 && !enroll" @close-modal="showApplicantModal"
                                  :genderprop="genderData"
                                  :nationalityprop="nationalityData"
                                  :regionprop="regionData"
@@ -102,6 +114,10 @@ const setPage = (page) =>{
                                  :barangayprop="barangayData"
                                  :civilstatusprop="civilstatusData"/>
       </Transition>
+      <Transition name="slide-fade" mode="out-in">
+         <Enrollment v-if="modal && content == 1 && enroll" @close-modal="showEnrollmentModal" :data="personData" :attainment="personAttainment"/>
+      </Transition>
+
       <Transition name="slide-fade" mode="out-in">
          <AddNewProgram v-if="modal && content == 2" :program="co_prog" :degree="co_deg" :semester="co_sem" @close-modal="showModal"/>
       </Transition>
@@ -135,6 +151,9 @@ const setPage = (page) =>{
             <div class="flex flex-col gap-2 p-1">
                <div :class="content == 1? active_class:def_class" @click="setPage(1)">
                   <p class="text-xs">Applicant</p>
+               </div>
+               <div :class="content == 10? active_class:def_class" @click="setPage(10)">
+                  <p class="text-xs">Students</p>
                </div>
                <div :class="content == 2? active_class:def_class" @click="setPage(2)">
                   <p class="text-xs">Programs</p>
@@ -170,7 +189,10 @@ const setPage = (page) =>{
             </div>
             <div class="w-full p-2">
                   <div v-if="content == 1">
-                     <Applicant @add-modal="showApplicantModal"/>
+                     <Applicant @add-modal="showApplicantModal" @enroll-modal="showEnrollmentModal"/>
+                  </div>
+                  <div v-if="content == 10">
+                     <Students/>
                   </div>
                   <div v-if="content == 2">
                      <!-- <Programs/> -->

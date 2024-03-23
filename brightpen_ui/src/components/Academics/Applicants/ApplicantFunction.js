@@ -1,6 +1,66 @@
 import axios from 'axios';
 
+let updateResponse = {}
+const updateApplicant = async (data, type) => {
+    try{
+        if(type == 1){// 1 means update, 2 means delete
+            await axios({
+                method: "POST",
+                url: 'api/update-applicant/',
+                data:data
+    
+            }).then(async (results) => {
+                updateResponse = results.data
+            })
+        }else{
+            await axios({
+                method: "POST",
+                url: 'api/delete-applicant/',
+                data:data
+    
+            }).then(async (results) => {
+                updateResponse = results.data
+            })
+        }
+        return updateResponse
+    }catch(err){
+        return 500
+    }
+    
+}
 
+let enroll = {}
+const enrollApplicant = async (data) => {
+    try{
+        await axios({
+            method: "POST",
+            url: 'api/enroll-applicant/',
+            data:data
+
+        }).then(async (results) => {
+            enroll = results.data
+        })
+        return enroll
+    }catch(err){
+        return 500
+    }
+}
+
+let enrollment = {}
+const getEnrollment = async (id) => {
+    try{
+        await axios({
+            method: "GET",
+            url: 'api/get-enrollment/'+id,
+        }).then(async (results) => {
+            // console.log(results.data)
+            enrollment = results.data
+        })
+        return enrollment
+    }catch(err){
+        return err
+    }
+}
 
 let response = {}
 const addApplicant = async (data, type) => {
@@ -20,12 +80,15 @@ const addApplicant = async (data, type) => {
 }
 
 let applicant = {}
-const getApplicant = async () => {
-
+const getApplicant = async (limit, offset, id) => {
+    let search = id
+    if(!id){
+        search = 204
+    }
     try{
         await axios({
             method: "GET",
-            url: 'api/get-applicant/',
+            url: 'api/get-applicant/'+limit+'/'+offset+'/'+search,
         }).then(async (results) => {
             // console.log(results.data)
             applicant = results.data
@@ -155,23 +218,6 @@ const getBarangay = async () => {
     }
 }
 
-let quarter = {}
-const getQuarter = async () => {
-
-    try{
-        await axios({
-            method: "GET",
-            url: 'api/get-quarter/',
-        }).then(async (results) => {
-            // console.log(results.data)
-            quarter = results.data
-        })
-        return quarter
-    }catch(err){
-        return err
-    }
-}
-
 let family = {}
 const getFamily = async (personid) => {
 
@@ -223,8 +269,81 @@ const getAttainment = async (personid) => {
     }
 }
 
+let gradelvl = {}
+const getGradelvl = async (type) => {
+    try{
+        await axios({
+            method: "GET",
+            url: 'api/get-gradelvl/',
+        }).then(async (results) => {
+            // console.log(results.data)
+            gradelvl = results.data
+        })
+        return gradelvl
+    }catch(err){
+        return 500
+    }
+}
+
+let program = {}
+const getProgram = async () => {
+
+    try{
+        await axios({
+            method: "GET",
+            url: 'api/get-program/',
+        }).then(async (results) => {
+            // console.log(results.data)
+            program = results.data
+        })
+        return program
+    }catch(err){
+        return err
+    }
+}
+
+let quarter = {}
+const getQuarter = async () => {
+
+    try{
+        await axios({
+            method: "GET",
+            url: 'api/get-quarter/',
+        }).then(async (results) => {
+            // console.log(results.data)
+            quarter = results.data
+        })
+        return quarter
+    }catch(err){
+        return err
+    }
+}
+
+let programlist = {}
+const getProgramList = async () => {
+    
+    try{
+        await axios({
+            method: "GET",
+            url: 'api/get-program-list/',
+        }).then(async (results) => {
+            // console.log(results.data)
+            programlist = results.data
+        })
+        return programlist
+    }catch(err){
+        return err
+    }
+}
+
+
+
+
 
 export {
+    updateApplicant,
+    enrollApplicant,
+    getEnrollment,
     addApplicant,
     getApplicant,
     getGender,
@@ -234,8 +353,11 @@ export {
     getProvince,
     getCity,
     getBarangay,
-    getQuarter,
     getFamily,
     getAward,
-    getAttainment
+    getAttainment,
+    getGradelvl,
+    getProgram,
+    getProgramList,
+    getQuarter,
 }
