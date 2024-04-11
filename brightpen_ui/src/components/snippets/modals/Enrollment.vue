@@ -61,13 +61,16 @@ onMounted(async () => {
 
         enrollChecker.value = true
         getEnrollment(person.value.per_personid).then((results)=>{
-            enrolleeData.value = results
-            if(enrolleeData.value){
+
+            if(results.length != 0){
+                enrolleeData.value = results[0]
                 detectCourse(enrolleeData.value.enr_course)
                 enrollData.value.gradelvl = enrolleeData.value.enr_gradelvl
                 enrollData.value.program = enrolleeData.value.enr_program
                 enrollData.value.quarter = enrolleeData.value.enr_quarter
                 enrollData.value.course = enrolleeData.value.enr_course
+            }else{
+                enrolleeData.value = []
             }
 
             enrollChecker.value = false
@@ -95,20 +98,19 @@ const interval = () => {
 }
 const setFalse = () => { 
     showItems.value = false
-    let prog_name = ''
-    let prog_id = ''
+    // let prog_name = ''
+    // let prog_id = ''
 
-    if(!filteredCourse.value.length){
-        prog_name = ''
-        prog_id = ''
-    }else{
-        prog_name = filteredCourse.value[0].prog_name
-        prog_id = filteredCourse.value[0].prog_id
-    }
+    // if(!filteredCourse.value.length){
+    //     prog_name = ''
+    //     prog_id = ''
+    // }else{
+    //     prog_name = filteredCourse.value[0].prog_name
+    //     prog_id = filteredCourse.value[0].prog_id
+    // }
 
-    !search.value.trim()? search.value = prog_name : search.value = prog_name
-    !enrollData.value.course? enrollData.value.course = prog_id : enrollData.value.course = prog_id
-
+    // !search.value.trim()? search.value = prog_name : search.value = prog_name
+    // !enrollData.value.course? enrollData.value.course = prog_id : enrollData.value.course = prog_id
 }
 
 const search = ref('')
@@ -274,7 +276,6 @@ const enroll = () =>{
                 <div v-if="!enrolleeData.enr_id && enrollChecker == true">
                     <button type="button" class="mt-4 w-full p-2 bg-gray-200 shadow-md text-xs text-white rounded-md hover:bg-gray-300 cursor-wait">Checking Enrollment Status</button>
                 </div>
-
             </div>
         </div>
     </div>

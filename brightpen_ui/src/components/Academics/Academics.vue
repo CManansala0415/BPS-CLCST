@@ -1,5 +1,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
+import { useRoute } from 'vue-router'
+
 import Programs from './Programs/Programs.vue';
 import Sections from './Sections/Sections.vue';
 import YearLevels from './YearLevels/YearLevels.vue';
@@ -19,7 +21,11 @@ import AddNewCurriculum from '../snippets/modals/RegFormCurriculum.vue';
 import AddNewApplicant from '../snippets/modals/RegFormApplicant.vue';
 import Enrollment from '../snippets/modals/Enrollment.vue';
 import Applicant from './Applicants/ApplicantForm.vue';
+
+import PrintForms from '../snippets/modals/PrintForms.vue';
+import Taggings from '../snippets/modals/Taggings.vue';
 import Students from './Students/Students.vue';
+
 
 const def_class = ref("flex items-center w-full rounded-lg cursor-pointer hover:bg-emerald-400 hover:text-gray-100 p-2");
 const active_class = ref("flex items-center w-full rounded-lg cursor-pointer bg-emerald-600 hover:bg-emerald-500 text-gray-100 p-2");
@@ -49,6 +55,11 @@ const cityData = ref([])
 const provinceData = ref([])
 const barangayData = ref([])
 const civilstatusData = ref([])
+
+const route = useRoute();  
+onMounted(async () => {
+   // console.log(route.params.id)
+})
 
 const showModal = (co_1, co_2, co_3, cl_1, cl_2, cu_1, cu_2, cu_3, cu_4 )=>{
    modal.value = !modal.value
@@ -96,14 +107,43 @@ const showEnrollmentModal = (data, attainment)=>{
 }
 
 const setPage = (page) =>{
-   window.stop() // stop request
-   content.value = page
+   if(page==content.value){
+      console.log('')
+   }else{
+      window.stop() // stop request
+      content.value = page
+   }
 }
 
+
+// student module, print forms
+const studentData = ref([])
+const studentInfo = ref([])
+const curriculum = ref([])
+const section = ref([])
+const subject = ref([])
+const printForm = ref(false)
+const taggingForm = ref(false)
+
+const showPrintFormModal = (data) =>{
+   studentData.value = data
+   printForm.value = !printForm.value
+}
+// student module, taggings
+const showTaggingsModal = (data, info, currData, secData, subjData) =>{
+   studentData.value = data // personal
+   studentInfo.value = info // academics, desc nung mga program, course etc
+   taggingForm.value = !taggingForm.value
+   curriculum.value = currData
+   section.value = secData
+   subject.value = subjData
+   
+}
 
 </script>
 <template>
    <div class="flex flex-col w-full h-full">
+      <!-- applicant module -->
       <Transition name="slide-fade" mode="out-in">
          <AddNewApplicant v-if="modal && content == 1 && !enroll" @close-modal="showApplicantModal"
                                  :genderprop="genderData"
@@ -117,6 +157,21 @@ const setPage = (page) =>{
       <Transition name="slide-fade" mode="out-in">
          <Enrollment v-if="modal && content == 1 && enroll" @close-modal="showEnrollmentModal" :data="personData" :attainment="personAttainment"/>
       </Transition>
+      <!-- applicant module -->
+
+      <!-- student module -->
+      <Transition name="slide-fade" mode="out-in">
+         <PrintForms v-if="printForm && content == 10" @close-modal="showPrintFormModal" :students="studentData"/>
+      </Transition>
+      <Transition name="slide-fade" mode="out-in">
+         <Taggings v-if="taggingForm && content == 10" @close-modal="showTaggingsModal" 
+                                                       :students="studentData" 
+                                                       :descriptions="studentInfo"
+                                                       :curriculum="curriculum"
+                                                       :section="section"
+                                                       :subject="subject"/>
+      </Transition>
+      <!-- student module -->
 
       <Transition name="slide-fade" mode="out-in">
          <AddNewProgram v-if="modal && content == 2" :program="co_prog" :degree="co_deg" :semester="co_sem" @close-modal="showModal"/>
@@ -192,7 +247,8 @@ const setPage = (page) =>{
                      <Applicant @add-modal="showApplicantModal" @enroll-modal="showEnrollmentModal"/>
                   </div>
                   <div v-if="content == 10">
-                     <Students/>
+                     <Students  @printform-modal="showPrintFormModal"
+                                @taggings-modal="showTaggingsModal"/>
                   </div>
                   <div v-if="content == 2">
                      <!-- <Programs/> -->

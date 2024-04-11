@@ -313,9 +313,9 @@ const transferData = (mode, type) =>{
         <div class="flex">
             <button type="button" @click="transferData('next', 1) " class="w-auto bg-cyan-500 hover:bg-cyan-400 p-2 rounded-md text-xs text-white">Register Applicant</button>  
         </div> 
-        <div class="flex">
+        <!-- <div class="flex">
             <button type="button" @click="transferData('next', 2) " class="w-auto bg-emerald-500 hover:bg-emerald-400 p-2 rounded-md text-xs text-white">Enroll Applicant</button>  
-        </div> 
+        </div>  -->
         
     </div> 
 </template>

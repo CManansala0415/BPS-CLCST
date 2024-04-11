@@ -76,6 +76,13 @@ Route::middleware(['auth:sanctum'])->get('/get-student/{limit}/{offset}/{search}
 Route::middleware(['auth:sanctum'])->post('/upload-profile', [FileManagement::class,'uploadProfile']);
 Route::middleware(['auth:sanctum'])->post('/upload-link', [FileManagement::class,'uploadLink']);
 Route::middleware(['auth:sanctum'])->get('/get-student-by-course/{limit}/{offset}/{search}', [RegistrarController::class,'getStudentByCourse']);
+Route::middleware(['auth:sanctum'])->get('/get-curriculum-student/{prog}/{type}', [RegistrarController::class,'getCurriculumStudent']);
+Route::middleware(['auth:sanctum'])->get('/get-curriculum-subject/{curr}', [RegistrarController::class,'getCurriculumSubject']);
+
+Route::middleware(['auth:sanctum'])->post('/add-milestone', [RegistrarController::class,'addMilestone']);
+Route::middleware(['auth:sanctum'])->get('/get-milestone/{curr}', [RegistrarController::class,'getMilestone']);
+Route::middleware(['auth:sanctum'])->post('/update-enrollment', [RegistrarController::class,'updateEnrollment']);
+Route::middleware(['auth:sanctum'])->post('/update-milestone', [RegistrarController::class,'updateMilestone']);
 
 
 

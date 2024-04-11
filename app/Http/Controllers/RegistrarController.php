@@ -11,7 +11,15 @@ class RegistrarController extends Controller
     public function getSubject()
     {
         
-        $subject = DB::table('def_subject')->orderBy('subj_id')
+        // $subject = DB::table('def_subject')->orderBy('subj_id')
+        // ->get();
+        // return $subject;
+        $subject = DB::table('def_curriculum_tags')
+        ->leftJoin('def_subject', 'def_curriculum_tags.currtag_subjid', '=', 'def_subject.subj_id') 
+        ->select(  
+            'def_subject.*',
+            'def_curriculum_tags.*',
+        )->orderBy('def_curriculum_tags.currtag_id')
         ->get();
         return $subject;
 
@@ -332,6 +340,30 @@ class RegistrarController extends Controller
        
     }
 
+    public function getCurriculumStudent($prog, $type)
+    {
+        
+        $curriculum = DB::table('def_curriculum')->orderBy('curr_id')
+        ->where('curr_progid', '=' , $prog)
+        ->where('curr_progtype', '=' , $type)
+        ->get();
+        return $curriculum; 
+       
+    }
+
+    public function getCurriculumSubject($curr)
+    {
+        $curriculum = DB::table('def_curriculum_tags')
+            ->leftJoin('def_subject', 'def_curriculum_tags.currtag_subjid', '=', 'def_subject.subj_id') 
+            ->select(  
+                'def_subject.*',
+                'def_curriculum_tags.*',
+            )->orderBy('def_curriculum_tags.currtag_id')
+            ->where('def_curriculum_tags.currtag_currid', '=' , $curr)
+            ->get();
+            return $curriculum;
+       
+    }
 
     public function getApplicant($limit, $offset, $search)
     {
@@ -341,7 +373,7 @@ class RegistrarController extends Controller
             $count = DB::table('def_person')->count();
         }
         else{
-             $applicant = DB::table('def_person')->orderBy('per_id','DESC')
+            $applicant = DB::table('def_person')->orderBy('per_id','DESC')
                         ->where('per_status', '=',  1)
                         ->where(function($query) use ($search) {
                             $query->where('per_firstname', 'like',  '%' . $search .'%')
@@ -645,7 +677,6 @@ class RegistrarController extends Controller
         
        
     }
-
     public function enrollApplicant(Request $request)
     {
        try{
@@ -671,9 +702,29 @@ class RegistrarController extends Controller
     public function getEnrollment($id)
     {
        
+        // $enrollment = DB::table('def_enrollment')
+        // ->where('enr_personid', '=' , $id)->get();
+        // // ->first();
+        // return $enrollment; 
+
         $enrollment = DB::table('def_enrollment')
-        ->where('enr_personid', '=' , $id)
-        ->first();
+            ->leftJoin('def_gradelvl', 'def_enrollment.enr_gradelvl', '=', 'def_gradelvl.grad_id') 
+            ->leftJoin('sett_quarter', 'def_enrollment.enr_quarter', '=', 'sett_quarter.quar_id') 
+            ->leftJoin('def_program', 'def_enrollment.enr_course', '=', 'def_program.prog_id') 
+            ->leftJoin('def_curriculum', 'def_enrollment.enr_curriculum', '=', 'def_curriculum.curr_id') 
+            ->leftJoin('def_section', 'def_enrollment.enr_section', '=', 'def_section.sec_id') 
+
+            ->select(  
+                'def_enrollment.*',
+                'def_gradelvl.*',
+                'def_program.*',
+                'def_curriculum.*',
+                'def_section.*',
+                'sett_quarter.*',
+            )
+            ->orderBy('def_enrollment.enr_dateenrolled','DESC')
+            ->where('def_enrollment.enr_personid', '=' , $id)
+            ->get();
         return $enrollment; 
        
     }
@@ -795,7 +846,111 @@ class RegistrarController extends Controller
             'count' => $count,
         ];
     }
-    
-    
+
+    public function addMilestone(Request $request)
+    {
+        
+        // date_default_timezone_set('Asia/Manila');
+        // $date = date('Y-m-d h:i:s', time());
+        // $primary = DB::table('def_milestone')->insert([
+        //     'mi_enrid' =>  $request->input('enr_id'),
+        //     'mi_subjid' =>  $request->input('subj_id'),
+        //     'mi_completed' =>  0,
+        //     'mi_date' =>  $date,
+        //     'mi_addby' => $request->input('user_id')
+        // ]);
+        $milestone = DB::table('def_milestone')
+            ->select('mi_id')
+            ->where('mi_enrid', '=' , $request->input('enr_id'))
+            ->where('mi_subjid', '=' , $request->input('subj_id'))
+            ->first();
+
+        if($milestone){
+            $milestoneid = $milestone->mi_id;
+
+            date_default_timezone_set('Asia/Manila');
+            $date = date('Y-m-d h:i:s', time());
+            $primary = DB::table('def_milestone')
+            ->where('mi_id','=', $milestoneid)
+            ->update([
+                'mi_updatedby' => $request->input('user_id'),
+                'mi_crossenr' => $request->input('mi_crossenr'),
+                'mi_tag' => $request->input('mi_tag'),
+                'mi_dateupdated' => $date,
+            ]);
+
+        }else{
+            date_default_timezone_set('Asia/Manila');
+            $date = date('Y-m-d h:i:s', time());
+            $primary = DB::table('def_milestone')->insert([
+                'mi_enrid' =>  $request->input('enr_id'),
+                'mi_subjid' =>  $request->input('subj_id'),
+                'mi_crossenr' =>  $request->input('crossenr'),
+                'mi_tag' =>  $request->input('mi_tag'),
+                'mi_completed' =>  0,
+                'mi_date' =>  $date,
+                'mi_addby' => $request->input('user_id')
+            ]);
+        }
+        return 200; 
+       
+    }
+
+    public function getMilestone($id)
+    {
+        $milestone = DB::table('def_milestone')
+            ->leftJoin('def_enrollment', 'def_milestone.mi_enrid', '=', 'def_enrollment.enr_id') 
+            ->leftJoin('def_subject', 'def_milestone.mi_subjid', '=', 'def_subject.subj_id') 
+            ->select(  
+                'def_enrollment.*',
+                'def_milestone.*',
+                'def_subject.*'
+            )
+            ->orderBy('def_enrollment.enr_dateenrolled','ASC')
+            ->where('def_milestone.mi_enrid', '=' , $id)
+            ->where('def_milestone.mi_status', '=' , 1)
+            ->get();
+        return $milestone; 
+       
+    }
+
+    public function updateEnrollment(Request $request){
+        try{
+            
+            date_default_timezone_set('Asia/Manila');
+            $date = date('Y-m-d h:i:s', time());
+            $primary = DB::table('def_enrollment')
+            ->where('enr_id','=', $request->input('enr_id'))
+            ->update([
+                'enr_curriculum' => $request->input('enr_curriculum'),
+                'enr_section' => $request->input('enr_section'),
+                'enr_updatedby' => $request->input('enr_updatedby'),
+                'enr_dateupdated' => $date,
+            ]);
+            return 204;
+        }
+        catch (Exception $ex) {
+            return 500;
+        }
+    }
+
+    public function updateMilestone(Request $request)
+    {
+        try{
+            date_default_timezone_set('Asia/Manila');
+            $date = date('Y-m-d h:i:s', time());
+            $primary = DB::table('def_milestone')
+            ->where('mi_id','=', $request->input('mi_id'))
+            ->update([
+                'mi_status' => $request->input('mi_status'),
+                'mi_updatedby' => $request->input('mi_updatedby'),
+                'mi_dateupdated' => $date,
+            ]);
+            return 204;
+        }
+        catch (Exception $ex) {
+            return 500;
+        }
+    }
     
 }

@@ -34,7 +34,8 @@ const save = ()=>{
                 <p class="mb-2 text-md font-semibold">New Department</p>   
                 <button type="button" @click="$emit('close-modal')" class="mb-2 bg-red-500 hover:bg-red-400 px-3 rounded-sm font-semibold text-white">&times;</button>  
            </div>
-           <form @submit.prevent="save" class="flex flex-col md:flex-row gap-4">
+           <form 
+            class="flex flex-col md:flex-row gap-4">
                 <div class="basis-full flex flex-col gap-2 justify-evenly">
                     <div class="flex flex-col gap-1 h-full">
                         <p class="text-xs">Department Code</p> 

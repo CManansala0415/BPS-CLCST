@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import {  getStudent, getQuarter, getProgram, getGradelvl, getProgramList, uploadProfile, uploadLink, getStudentByCourse } from "../../Academics/students/StudentFunction.js";
+import {  getStudent, getQuarter, getProgram, getGradelvl, getProgramList, uploadProfile, uploadLink, getStudentByCourse, getCurriculum, getSection, getSubject } from "../../Academics/students/StudentFunction.js";
 import NoDataFound from '../../snippets/informational/NoDataFound.vue';
 import SearchHeader from '../../snippets/headers/SearchHeader.vue';
 import Loader from '../../snippets/loaders/Loading1.vue';
@@ -11,6 +11,9 @@ const quarter = ref([])
 const gradelvl = ref([])
 const program = ref([])
 const course = ref([])
+const curriculum = ref([])
+const section = ref([])
+const subject = ref([])
 
 const booting = ref('')
 const bootingCount = ref(0)
@@ -37,6 +40,48 @@ const booter = async() =>{
         booting.value = 'Loading Quarters...'
         bootingCount.value += 1
     })
+    getSection().then((results)=>{
+        section.value = results
+        booting.value = 'Loading Sections...'
+        bootingCount.value += 1
+    })
+    getSubject().then((results)=>{
+        subject.value = results
+        booting.value = 'Loading Subjects...'
+        bootingCount.value += 1
+    })
+    
+}
+
+const emit = defineEmits(['printform-modal', 'taggings-modal'])
+const showPrintForm = (data) =>{
+    emit('printform-modal', data)
+}
+const showTaggingsModal = (data, index) =>{
+    // get yung mga description text ng html select para ipasa sa modal ng taggings
+    var program = document.getElementById(index+"program");
+    var course = document.getElementById(index+"course");
+    var gradelvl = document.getElementById(index+"gradelvl");
+    var quarter = document.getElementById(index+"quarter");
+
+    var programValue= program.options[program.selectedIndex].text;
+    var courseValue= course.options[course.selectedIndex].text;
+    var gradelvlValue= gradelvl.options[gradelvl.selectedIndex].text;
+    var quarterValue= quarter.options[quarter.selectedIndex].text;
+
+    let info = {
+        per_program_desc: programValue,
+        per_course_desc: courseValue,
+        per_gradelvl_desc: gradelvlValue,
+        per_quarter_desc: quarterValue
+    }
+
+    getCurriculum( student.value[index].enr_course, student.value[index].enr_program).then((results)=>{
+        curriculum.value = results
+        emit('taggings-modal', data, info, curriculum.value, section.value, subject.value)
+
+    })
+
 }
 
 const limit = ref(10)
@@ -243,7 +288,7 @@ const filterCourse = ()=>{
 
                 
                 <Loader v-if="preLoading">
-                    <p class="text-xs"> {{ booting }} {{bootingCount}} out of 5</p>
+                    <p class="text-xs"> {{ booting }} {{bootingCount}} out of 6</p>
                 </Loader>
 
                 <div v-if="!preLoading" class="p-3 flex flex-col gap-3">
@@ -302,16 +347,16 @@ const filterCourse = ()=>{
                         </div>
                         
                         <div class="border rounded-md p-2 flex flex-col items-center">
-                            <select class="border-0 h-full p-2 text-xs w-full appearance-none pointer-events-none" v-model="s.enr_program">
+                            <select class="border-0 h-full p-2 text-xs w-full appearance-none pointer-events-none" v-model="s.enr_program" :id="index+'program'">
                                 <option v-for="(p, index) in program" :value="p.dtype_id">{{ p.dtype_desc }}</option>
                             </select>
-                            <select class="border-0 h-full p-2 text-xs w-full appearance-none pointer-events-none" v-model="s.enr_course">
+                            <select class="border-0 h-full p-2 text-xs w-full appearance-none pointer-events-none" v-model="s.enr_course" :id="index+'course'">
                                 <option v-for="(c, index) in course" :value="c.prog_id">{{ c.prog_code }}</option>
                             </select>
-                            <select class="border-0 h-full p-2 text-xs w-full appearance-none pointer-events-none" v-model="s.enr_gradelvl">
+                            <select class="border-0 h-full p-2 text-xs w-full appearance-none pointer-events-none" v-model="s.enr_gradelvl" :id="index+'gradelvl'">
                                 <option v-for="(g, index) in gradelvl" :value="g.grad_id">{{ g.grad_name }}</option>
                             </select>
-                            <select class="border-0 h-full p-2 text-xs w-full appearance-none pointer-events-none" v-model="s.enr_quarter">
+                            <select class="border-0 h-full p-2 text-xs w-full appearance-none pointer-events-none" v-model="s.enr_quarter" :id="index+'quarter'">
                                 <option v-for="(q, index) in quarter" :value="q.quar_id">{{ q.quar_desc }}</option>
                             </select>
                         </div>
@@ -323,8 +368,8 @@ const filterCourse = ()=>{
                             <p v-if="showLink && index==linkId" class="text-xs">{{ image.name }}</p>
 
                             <label @click="showLink = !showLink, linkId = index " :for="index" class="cursor-pointer bg-emerald-500 p-2 h-full text-xs text-white hover:bg-emerald-400 w-full text-center">Add Picture</label>
-                            <button class="bg-teal-500 p-2 h-full text-xs text-white hover:bg-teal-400 w-full">Taggings</button>
-                            <button class="bg-cyan-500 p-2 h-full text-xs text-white hover:bg-cyan-400 w-full">Forms</button>
+                            <button @click="showTaggingsModal(s, index)" class="bg-teal-500 p-2 h-full text-xs text-white hover:bg-teal-400 w-full">Taggings</button>
+                            <button @click="showPrintForm(s)" class="bg-cyan-500 p-2 h-full text-xs text-white hover:bg-cyan-400 w-full">Forms</button>
                             <button class="bg-red-500 p-2 h-full text-xs text-white hover:bg-red-400 w-full">Drop Student</button>
                             
                         </div>

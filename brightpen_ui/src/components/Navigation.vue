@@ -48,7 +48,7 @@ const navList = ref(
         def_class: 'hover:bg-green-900 cursor-pointer p-3',
         active_class:'hover:bg-green-700 cursor-pointer bg-green-800 p-3',
         icon:'fa-solid fa-gauge mr-3',
-        router_link:'/academics'
+        router_link:'/academics/1'
     },
   ]
 );
